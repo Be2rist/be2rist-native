@@ -1,0 +1,18 @@
+{
+  "login": "Login",
+  "error": {
+    "tryLater": "An Error Occurred. Try Again Later"
+  },
+  "settings": {
+    "title": "Settings",
+    "darkMode": "Dark Mode",
+    "language": "Language"
+  },
+  "mainMenu": {
+    "routes": "Routes",
+    "favorites": "Favorites",
+    "sharing": "Sharing",
+    "profile": "Profile"
+  }
+};
+
