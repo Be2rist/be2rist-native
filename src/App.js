@@ -11,6 +11,7 @@ import {
 } from 'react-native-paper';
 import {SettingsContext} from 'SettingsProvider';
 import NotificationMessageProvider from 'components/root/NotificationMessageProvider';
+import {GeoLocationProvider} from 'GeoLocationProvider';
 
 const defaultTheme = {
   ...DefaultTheme,
@@ -44,9 +45,11 @@ const Main = () => {
   ) : (
     <PaperProvider
       theme={settings.theme === 'dark' ? DefaultDarkTheme : defaultTheme}>
-      <NotificationMessageProvider>
-        <AppRouter />
-      </NotificationMessageProvider>
+      <GeoLocationProvider>
+        <NotificationMessageProvider>
+          <AppRouter />
+        </NotificationMessageProvider>
+      </GeoLocationProvider>
     </PaperProvider>
   );
 };
