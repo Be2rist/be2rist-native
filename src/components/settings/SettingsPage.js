@@ -3,16 +3,25 @@ import {SafeAreaView, ScrollView, StatusBar} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {useNavigate} from 'react-router-native';
 import {useTranslation} from 'react-i18next';
-import {
-  Appbar,
-  IconButton,
-  List,
-  Switch,
-  TouchableRipple,
-} from 'react-native-paper';
+import {Appbar, List, Switch, TouchableRipple} from 'react-native-paper';
 import {SettingsContext} from 'SettingsProvider';
 import LanguageListDialog from 'components/settings/LanguageListDialog';
 import {storeSettings} from 'services/sessionStorage';
+import ChevronIcon from 'components/custom/ChevronIcon';
+
+const ThemeLightIcon = props => (
+  <List.Icon {...props} size={32} icon="theme-light-dark" />
+);
+
+const ThemeSwitch = ({props, settings, handleThemeChange}) => (
+  <Switch
+    {...props}
+    value={settings.theme === 'dark'}
+    onValueChange={handleThemeChange}
+  />
+);
+
+const LanguageIcon = props => <List.Icon {...props} icon="format-clear" />;
 
 const SettingsPage = () => {
   const navigate = useNavigate();
@@ -64,24 +73,16 @@ const SettingsPage = () => {
         </Appbar.Header>
         <List.Item
           title={t('settings.darkMode')}
-          left={props => (
-            <List.Icon {...props} size={32} icon="theme-light-dark" />
-          )}
-          right={props => (
-            <Switch
-              {...props}
-              value={settings.theme === 'dark'}
-              onValueChange={handleThemeChange}
-            />
-          )}
+          left={ThemeLightIcon}
+          right={props => ThemeSwitch({props, settings, handleThemeChange})}
         />
         <TouchableRipple
           onPress={showLanguageDialog}
           rippleColor="rgba(0, 0, 0, .32)">
           <List.Item
             title={t('settings.language')}
-            left={props => <List.Icon {...props} icon="format-clear" />}
-            right={props => <IconButton {...props} icon="chevron-right" />}
+            left={LanguageIcon}
+            right={ChevronIcon}
           />
         </TouchableRipple>
       </ScrollView>
