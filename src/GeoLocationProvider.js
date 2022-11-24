@@ -4,26 +4,24 @@ import Geolocation from '@react-native-community/geolocation';
 const GeoLocationContext = createContext();
 
 const GeoLocationProvider = ({children}) => {
-  const [position, setPosition] = useState(null);
+  const [position, setPosition] = useState({});
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      Geolocation.getCurrentPosition(e => {
-        if (
-          !(
-            e.coords.latitude === position?.latitude &&
-            e.coords.longitude === position?.longitude
-          )
-        ) {
-          setPosition({
-            latitude: e.coords.latitude,
-            longitude: e.coords.longitude,
-          });
-        }
-      }, console.log);
-    }, 3000);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const id = Geolocation.watchPosition(
+      e =>
+        setPosition({
+          latitude: e.coords.latitude,
+          longitude: e.coords.longitude,
+        }),
+      console.log,
+      {
+        enableHighAccuracy: true,
+        distanceFilter: 1,
+        interval: 1000,
+        fastestInterval: 500,
+      },
+    );
+    return () => Geolocation.clearWatch(id);
   }, []);
 
   return (

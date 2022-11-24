@@ -15,6 +15,17 @@ import auth from '@react-native-firebase/auth';
 import {useNavigate} from 'react-router-native';
 import {useTranslation} from 'react-i18next';
 import {SettingsContext} from 'SettingsProvider';
+import ChevronIcon from 'components/custom/ChevronIcon';
+
+const LogoutButton = (props, onSignOut) => (
+  <IconButton {...props} icon="logout" onPress={onSignOut} />
+);
+
+const ProfileAvatar = (props, user) => (
+  <Avatar.Image source={{uri: user.photoURL}} {...props} />
+);
+
+const SettingsIcon = props => <List.Icon {...props} icon="cog" />;
 
 const ProfilePage = () => {
   const user = useSelector(state => selectUser(state));
@@ -48,12 +59,8 @@ const ProfilePage = () => {
             <Card.Title
               title={user.displayName}
               subtitle={user.email}
-              left={props => (
-                <Avatar.Image source={{uri: user.photoURL}} {...props} />
-              )}
-              right={props => (
-                <IconButton {...props} icon="logout" onPress={onSignOut} />
-              )}
+              left={props => ProfileAvatar(props, user)}
+              right={props => LogoutButton(props, onSignOut)}
             />
           ) : (
             <Button onPress={() => navigate('/login')}>{t('login')}</Button>
@@ -64,8 +71,8 @@ const ProfilePage = () => {
           rippleColor="rgba(0, 0, 0, .32)">
           <List.Item
             title={t('settings.title')}
-            left={props => <List.Icon {...props} icon="cog" />}
-            right={props => <IconButton {...props} icon="chevron-right" />}
+            left={SettingsIcon}
+            right={ChevronIcon}
           />
         </TouchableRipple>
       </ScrollView>

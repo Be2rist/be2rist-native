@@ -20,6 +20,12 @@ This react-native project for mobile platforms.
 - Open android folder and run "Link to Gradle" in the popup menu
 - Run "reload gradle project"
 
+> Note: To force application to use High-Accuracy Geo position go to [PlayServicesLocationManager](node_modules/@react-native-community/geolocation/android/src/main/java/com/reactnativecommunity/geolocation/PlayServicesLocationManager.java) and change code below.
+> !!!Need to find out the way how to set PRIORITY_HIGH_ACCURACY from the configuration. enableHighAccuracy option not working!!!
+>>locationRequest.setPriority(locationOptions.highAccuracy ? LocationRequest.PRIORITY_HIGH_ACCURACY : LocationRequest.PRIORITY_LOW_POWER);
+>> => 
+>>locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
 ## Running
 - To start locally run ``npm run-script android`` or ``android`` script from package.json
 

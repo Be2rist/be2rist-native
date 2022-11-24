@@ -6,16 +6,18 @@ import {selectRoute} from 'services/redux/routeSlice';
 import AudioPlayer from 'components/player/AudioPlayer';
 import {SettingsContext} from 'SettingsProvider';
 import RouteCard from 'components/route/RouteCard';
-import {IconButton, Text} from 'react-native-paper';
-import {useNavigate} from 'react-router-native';
+import {Text} from 'react-native-paper';
 import {getDistance} from 'geolib';
 import {GeoLocationContext} from 'GeoLocationProvider';
+import CloseButton from 'components/custom/CloseButton';
+
+const pointArea = 20;
 
 const PlayRoutePage = () => {
-  const navigate = useNavigate();
   const route = useSelector(state => selectRoute(state));
   const [pointIndex, setPointIndex] = useState(null);
   const [nearbyPoint, setNearbyPoint] = useState(null);
+  const [playRoute, setPlayRoute] = useState(false);
   const {
     settings: {theme},
   } = useContext(SettingsContext);
@@ -24,19 +26,26 @@ const PlayRoutePage = () => {
 
   useEffect(() => {
     if (position) {
-      let find = route?.points
-        .map(item => {
+      let closeIn = route?.points
+        .map((item, index) => {
           const location = {
             latitude: item.location._latitude,
             longitude: item.location._longitude,
           };
-          return getDistance(position, location);
+          return {index, distance: getDistance(position, location)};
         })
-        .sort()
+        .sort((a, b) => b.distance - a.distance)
         .pop();
-      setNearbyPoint(find);
+      setNearbyPoint(closeIn?.distance);
+      if (
+        closeIn?.distance < pointArea &&
+        pointIndex !== closeIn.index + 1 &&
+        playRoute
+      ) {
+        setPointIndex(closeIn.index + 1);
+      }
     }
-  }, [position, route?.points]);
+  }, [playRoute, pointIndex, position, route?.points]);
 
   const mediaResolver = currentPoint => {
     switch (currentPoint.contentType) {
@@ -45,7 +54,7 @@ const PlayRoutePage = () => {
           <AudioPlayer
             key={currentPoint.id}
             point={currentPoint}
-            close={() => setPointIndex(null)}
+            close={stopPlaying}
             showNext={showNext}
             showPrevious={showPrevious}
             isFirst={pointIndex === 1}
@@ -74,8 +83,13 @@ const PlayRoutePage = () => {
     }
   };
 
-  const playRoute = () => {
-    setPointIndex(1);
+  const onPlayRoute = () => {
+    setPlayRoute(true);
+  };
+
+  const stopPlaying = () => {
+    setPlayRoute(false);
+    setPointIndex(null);
   };
 
   return (
@@ -89,24 +103,14 @@ const PlayRoutePage = () => {
         style={backgroundStyle}>
         {route && !pointIndex && (
           <>
-            <View
-              style={{position: 'absolute', left: 1, top: 1, zIndex: 10001}}>
-              {position && nearbyPoint && (
-                <Text>
-                  {position.latitude}
-                  {position.longitude} {nearbyPoint}
-                </Text>
-              )}
-              <IconButton
-                icon="close"
-                size={50}
-                onPress={() => navigate('/')}
-              />
-            </View>
-            <RouteCard route={route} onPlay={playRoute} />
+            <CloseButton />
+            {position && <Text>{nearbyPoint}</Text>}
+            {playRoute && <View style={{height: 200}} />}
+            {!playRoute && <RouteCard route={route} onPlay={onPlayRoute} />}
           </>
         )}
         {route &&
+          playRoute &&
           pointIndex &&
           route.points[pointIndex - 1] &&
           mediaResolver(route.points[pointIndex - 1])}
