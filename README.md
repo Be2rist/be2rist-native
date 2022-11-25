@@ -15,7 +15,8 @@ This react-native project for mobile platforms.
   ``npm ci``
 - 
 ### 3. Build gradle project
-- Create new file keystore.properties in the android folder and put [key params](https://developer.android.com/studio/publish/app-signing).
+- Create new file project.properties in the android folder and put [key params](https://developer.android.com/studio/publish/app-signing).
+- Put GEO_API_KEY into the project.properties to link GOOGLE_MAPS [GEO_API_KEY](https://developers.google.com/maps/documentation/geolocation/get-api-key).
 - Add google-services.json to the android/app folder [Manual Step3](https://firebase.google.com/docs/android/setup)
 - Open android folder and run "Link to Gradle" in the popup menu
 - Run "reload gradle project"

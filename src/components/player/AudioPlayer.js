@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import * as PropTypes from 'prop-types';
 import {ActivityIndicator, IconButton, Text} from 'react-native-paper';
 import Sound from 'react-native-sound';
@@ -31,6 +31,7 @@ const AudioPlayer = ({
   showPrevious,
   showNext,
   isLast,
+  disablePointControls,
   isFirst,
 }) => {
   const {height, width} = useWindowDimensions();
@@ -57,71 +58,19 @@ const AudioPlayer = ({
   const [loop, setLoop] = useState(0);
   const styles = useMemo(() => createStyles({width, height}), [width, height]);
 
-  useEffect(() => {
-    onPlay();
-    return releaseSound;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => setLoop(Math.random()), 200);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    if (
-      sound &&
-      sound.isLoaded() &&
-      playState === 'playing' &&
-      !sliderEditing
-    ) {
-      sound.getCurrentTime((seconds, isPlaying) => {
-        setPlaySeconds(seconds);
-        setImageByTime(seconds);
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loop, playState, sliderEditing, sound]);
-
-  const currentTimeString = useMemo(
-    () => getAudioTimeString(playSeconds),
-    [playSeconds],
-  );
-  const durationString = useMemo(
-    () => getAudioTimeString(duration),
-    [duration],
-  );
-
-  const setImageByTime = time => {
-    let imageKey = timeMap[0];
-    for (const timeMapKey of timeMap) {
-      if (time > timeMapKey.time) {
-        imageKey = timeMapKey;
-      } else {
-        break;
-      }
-    }
-    if (imageKey !== currentImage) {
-      setCurrentImage(imageKey);
-    }
-  };
-
-  const releaseSound = () => {
+  const releaseSound = useCallback(() => {
     sound?.release();
-  };
+  }, [sound]);
 
-  const onClose = () => {
-    releaseSound();
-    setSound(null);
-    close();
-  };
-
-  const onPause = () => {
-    sound?.pause();
+  const playComplete = useCallback(() => {
+    setPlaySeconds(0);
     setPlayState('paused');
-  };
+    if (sound) {
+      sound.setCurrentTime(0);
+    }
+  }, [sound]);
 
-  const onPlay = () => {
+  const onPlay = useCallback(() => {
     if (sound) {
       sound.play(playComplete);
       setPlayState('playing');
@@ -138,45 +87,107 @@ const AudioPlayer = ({
         }
       });
     }
-  };
+  }, [playComplete, point.audioContent, sound]);
 
-  const playComplete = () => {
-    if (sound) {
-      sound.setCurrentTime(0);
-      setPlaySeconds(0);
-      setPlayState('paused');
+  const setImageByTime = useCallback(
+    time => {
+      let imageKey = timeMap[0];
+      for (const timeMapKey of timeMap) {
+        if (time > timeMapKey.time) {
+          imageKey = timeMapKey;
+        } else {
+          break;
+        }
+      }
+      if (imageKey !== currentImage) {
+        setCurrentImage(imageKey);
+      }
+    },
+    [currentImage, timeMap],
+  );
+
+  useEffect(() => {
+    onPlay();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [point]);
+
+  useEffect(() => {
+    return () => releaseSound();
+  }, [releaseSound, sound]);
+
+  useEffect(() => {
+    const interval = setInterval(() => setLoop(Math.random()), 200);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (
+      sound &&
+      sound.isLoaded() &&
+      playState === 'playing' &&
+      !sliderEditing
+    ) {
+      sound.getCurrentTime(seconds => {
+        setPlaySeconds(seconds);
+        setImageByTime(seconds);
+      });
     }
-  };
+  }, [loop, playState, setImageByTime, sliderEditing, sound]);
 
-  const onSliderEditStart = () => {
+  const currentTimeString = useMemo(
+    () => getAudioTimeString(playSeconds),
+    [playSeconds],
+  );
+  const durationString = useMemo(
+    () => getAudioTimeString(duration),
+    [duration],
+  );
+
+  const onClose = useCallback(() => {
+    releaseSound();
+    setSound(null);
+    close();
+  }, [close, releaseSound]);
+
+  const onPause = useCallback(() => {
+    sound?.pause();
+    setPlayState('paused');
+  }, [sound]);
+
+  const onSliderEditStart = useCallback(() => {
     setSliderEditing(true);
-  };
+  }, []);
 
-  const onSliderEditEnd = value => {
+  const onSliderEditEnd = useCallback(() => {
     setSliderEditing(false);
-  };
+  }, []);
 
-  const onSliderEditing = value => {
-    if (sound) {
-      sound.setCurrentTime(value);
-      setPlaySeconds(value);
-    }
-  };
+  const onSliderEditing = useCallback(
+    value => {
+      if (sound) {
+        sound.setCurrentTime(value);
+        setPlaySeconds(value);
+      }
+    },
+    [sound],
+  );
 
-  const clickPause = () =>
-    sound?.isLoaded() && (playState === 'paused' ? onPlay() : onPause());
+  const clickPause = useCallback(
+    () => sound?.isLoaded() && (playState === 'paused' ? onPlay() : onPause()),
+    [onPause, onPlay, playState, sound],
+  );
 
-  const onShowNext = () => {
+  const onShowNext = useCallback(() => {
     sound?.release();
     setSound(null);
     showNext();
-  };
+  }, [showNext, sound]);
 
-  const onShowPrevious = () => {
+  const onShowPrevious = useCallback(() => {
     sound?.release();
     setSound(null);
     showPrevious();
-  };
+  }, [showPrevious, sound]);
 
   return (
     <View style={styles.container}>
@@ -192,22 +203,26 @@ const AudioPlayer = ({
             disabled={!soundLoaded}
           />
         </View>
-        <View style={styles.previousButton}>
-          <IconButton
-            icon="skip-previous"
-            size={50}
-            onPress={onShowPrevious}
-            disabled={isFirst || !soundLoaded}
-          />
-        </View>
-        <View style={styles.nextButton}>
-          <IconButton
-            icon="skip-next"
-            size={50}
-            onPress={onShowNext}
-            disabled={isLast || !soundLoaded}
-          />
-        </View>
+        {!disablePointControls && (
+          <>
+            <View style={styles.previousButton}>
+              <IconButton
+                icon="skip-previous"
+                size={50}
+                onPress={onShowPrevious}
+                disabled={isFirst || !soundLoaded}
+              />
+            </View>
+            <View style={styles.nextButton}>
+              <IconButton
+                icon="skip-next"
+                size={50}
+                onPress={onShowNext}
+                disabled={isLast || !soundLoaded}
+              />
+            </View>
+          </>
+        )}
         <View style={styles.playButton}>
           {soundLoaded ? (
             <IconButton
@@ -304,6 +319,7 @@ export default React.memo(AudioPlayer);
 
 AudioPlayer.propTypes = {
   point: PropTypes.object.isRequired,
+  disablePointControls: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   showPrevious: PropTypes.func.isRequired,
   showNext: PropTypes.func.isRequired,

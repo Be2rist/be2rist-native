@@ -31,6 +31,7 @@ local.properties
 *.hprof
 .cxx/
 /android/keystore.properties
+/android/project.properties
 /android/app/google-services.json
 
 # node.js
