@@ -10,7 +10,6 @@ import {
   Slider,
   View,
 } from 'react-native';
-import {bool} from 'prop-types';
 
 const getAudioTimeString = seconds => {
   const h = parseInt(seconds / (60 * 60), 10);
@@ -320,7 +319,7 @@ export default React.memo(AudioPlayer);
 
 AudioPlayer.propTypes = {
   point: PropTypes.object.isRequired,
-  disablePointControls: bool.isRequired,
+  disablePointControls: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   showPrevious: PropTypes.func.isRequired,
   showNext: PropTypes.func.isRequired,
