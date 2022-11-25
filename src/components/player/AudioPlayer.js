@@ -127,7 +127,7 @@ const AudioPlayer = ({
       playState === 'playing' &&
       !sliderEditing
     ) {
-      sound.getCurrentTime((seconds) => {
+      sound.getCurrentTime(seconds => {
         setPlaySeconds(seconds);
         setImageByTime(seconds);
       });
