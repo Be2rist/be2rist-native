@@ -130,15 +130,17 @@ def reactNativeArchitectures() {
     return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
 }
 
-// Create a variable called keystorePropertiesFile, and initialize it to your
-// keystore.properties file, in the rootProject folder.
-def keystorePropertiesFile = rootProject.file("keystore.properties")
+// Create a variable called projectPropertiesFile, and initialize it to your
+// project.properties file, in the rootProject folder.
+def projectPropertiesFile = rootProject.file("project.properties")
 
-// Initialize a new Properties() object called keystoreProperties.
-def keystoreProperties = new Properties()
+// Initialize a new Properties() object called projectProperties.
+def projectProperties = new Properties()
 
-// Load your keystore.properties file into the keystoreProperties object.
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+// Load your project.properties file into the projectProperties object.
+projectProperties.load(new FileInputStream(projectPropertiesFile))
+
+def googleGeoApiKey = projectProperties['googleGeoApiKey']
 
 android {
     ndkVersion rootProject.ext.ndkVersion
@@ -152,6 +154,7 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+        manifestPlaceholders = [GOOGLE_GEO_API_KEY: googleGeoApiKey]
 
         if (isNewArchitectureEnabled()) {
             // We configure the CMake build only if you decide to opt-in for the New Architecture.
@@ -229,10 +232,10 @@ android {
             keyPassword 'android'
         }
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+            keyAlias projectProperties['keyAlias']
+            keyPassword projectProperties['keyPassword']
+            storeFile file(projectProperties['storeFile'])
+            storePassword projectProperties['storePassword']
         }
     }
     buildTypes {

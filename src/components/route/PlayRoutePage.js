@@ -10,7 +10,9 @@ import {Text} from 'react-native-paper';
 import {getDistance} from 'geolib';
 import {GeoLocationContext} from 'GeoLocationProvider';
 import CloseButton from 'components/custom/CloseButton';
+import PlayRoutePreview from 'components/route/PlayRoutePreview';
 
+// TODO: Move to the firebase #8
 const pointArea = 20;
 
 const PlayRoutePage = () => {
@@ -22,10 +24,10 @@ const PlayRoutePage = () => {
     settings: {theme},
   } = useContext(SettingsContext);
   const isDarkMode = theme === 'dark';
-  const {position} = useContext(GeoLocationContext);
+  const {position, enabled: gpsEnabled} = useContext(GeoLocationContext);
 
   useEffect(() => {
-    if (position) {
+    if (gpsEnabled) {
       let closeIn = route?.points
         .map((item, index) => {
           const location = {
@@ -45,7 +47,7 @@ const PlayRoutePage = () => {
         setPointIndex(closeIn.index + 1);
       }
     }
-  }, [playRoute, pointIndex, position, route?.points]);
+  }, [gpsEnabled, playRoute, pointIndex, position, route?.points]);
 
   const mediaResolver = currentPoint => {
     switch (currentPoint.contentType) {
@@ -55,6 +57,7 @@ const PlayRoutePage = () => {
             key={currentPoint.id}
             point={currentPoint}
             close={stopPlaying}
+            disablePointControls={gpsEnabled}
             showNext={showNext}
             showPrevious={showPrevious}
             isFirst={pointIndex === 1}
@@ -85,6 +88,9 @@ const PlayRoutePage = () => {
 
   const onPlayRoute = () => {
     setPlayRoute(true);
+    if (!gpsEnabled) {
+      setPointIndex(1);
+    }
   };
 
   const stopPlaying = () => {
@@ -104,8 +110,8 @@ const PlayRoutePage = () => {
         {route && !pointIndex && (
           <>
             <CloseButton />
-            {position && <Text>{nearbyPoint}</Text>}
-            {playRoute && <View style={{height: 200}} />}
+            {gpsEnabled && <Text>{nearbyPoint}</Text>}
+            {gpsEnabled && playRoute && <PlayRoutePreview route={route} />}
             {!playRoute && <RouteCard route={route} onPlay={onPlayRoute} />}
           </>
         )}

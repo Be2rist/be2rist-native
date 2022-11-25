@@ -1,19 +1,30 @@
 import React, {createContext, useEffect, useState} from 'react';
 import Geolocation from '@react-native-community/geolocation';
+import {enableLatestRenderer} from 'react-native-maps';
 
 const GeoLocationContext = createContext();
 
+const MAX_ERRORS_COUNT = 10;
+
 const GeoLocationProvider = ({children}) => {
   const [position, setPosition] = useState({});
+  const [enabled, setEnabled] = useState(false);
+  const [error, setError] = useState();
+  const [errorsCount, setErrorsCount] = useState(0);
 
   useEffect(() => {
+    enableLatestRenderer();
     const id = Geolocation.watchPosition(
-      e =>
-        setPosition({
-          latitude: e.coords.latitude,
-          longitude: e.coords.longitude,
-        }),
-      console.log,
+      ({coords}) => {
+        !enabled && setEnabled(true);
+        errorsCount && setErrorsCount(0);
+        setPosition(coords);
+      },
+      e => {
+        !error && setError(e);
+        enabled && setErrorsCount(errorsCount + 1);
+        errorsCount > MAX_ERRORS_COUNT && enabled && setEnabled(false);
+      },
       {
         enableHighAccuracy: true,
         distanceFilter: 1,
@@ -22,10 +33,10 @@ const GeoLocationProvider = ({children}) => {
       },
     );
     return () => Geolocation.clearWatch(id);
-  }, []);
+  }, [enabled, error, errorsCount]);
 
   return (
-    <GeoLocationContext.Provider value={{position}}>
+    <GeoLocationContext.Provider value={{position, enabled, error}}>
       {children}
     </GeoLocationContext.Provider>
   );
