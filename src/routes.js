@@ -3,10 +3,11 @@ import {getRouteById} from 'services/redux/routeSlice';
 
 const LoginPage = lazy(() => import('components/login/LoginPage'));
 const SharingPage = lazy(() => import('components/sharing/SharingPage'));
+const GamesPage = lazy(() => import('components/game/GamesPage'));
 const ProfilePage = lazy(() => import('components/profile/ProfilePage'));
-const FavoritePage = lazy(() => import('components/favorites/FavoritePage'));
+const PointsPage = lazy(() => import('components/point/PointsPage'));
 const PlayRoutePage = lazy(() => import('components/route/PlayRoutePage'));
-const RoutePage = lazy(() => import('components/route/RoutePage'));
+const RoutesPage = lazy(() => import('components/route/RoutesPage'));
 const SettingsPage = lazy(() => import('components/settings/SettingsPage'));
 
 const routes = [
@@ -19,7 +20,7 @@ const routes = [
   {
     path: '/routes',
     key: 'routes',
-    element: <RoutePage />,
+    element: <RoutesPage />,
     title: 'routes',
     focusedIcon: 'navigation-variant',
     unfocusedIcon: 'navigation-variant-outline',
@@ -28,14 +29,26 @@ const routes = [
     unAuthenticated: true,
   },
   {
-    path: '/favorites',
-    key: 'favorites',
-    element: <FavoritePage />,
-    title: 'favorites',
-    focusedIcon: 'heart',
-    unfocusedIcon: 'heart-outline',
+    path: '/points',
+    key: 'points',
+    element: <PointsPage />,
+    title: 'points',
+    focusedIcon: 'map-marker',
+    unfocusedIcon: 'map-marker-outline',
     mainMenu: true,
     index: 1,
+    unAuthenticated: true,
+  },
+  {
+    path: '/games',
+    key: 'games',
+    element: <GamesPage />,
+    title: 'games',
+    focusedIcon: 'gamepad',
+    unfocusedIcon: 'gamepad-outline',
+    mainMenu: true,
+    index: 2,
+    unAuthenticated: true,
   },
   {
     path: '/sharing',
@@ -45,18 +58,7 @@ const routes = [
     focusedIcon: 'image-edit',
     unfocusedIcon: 'image-edit-outline',
     mainMenu: true,
-    index: 2,
-  },
-  {
-    path: '/profile',
-    key: 'profile',
-    element: <ProfilePage />,
-    title: 'profile',
-    focusedIcon: 'account-circle',
-    unfocusedIcon: 'account-circle-outline',
-    mainMenu: true,
     index: 3,
-    unAuthenticated: true,
   },
   {
     path: '/play/:id',
@@ -68,6 +70,12 @@ const routes = [
   {
     path: '/settings',
     element: <SettingsPage />,
+    unAuthenticated: true,
+    fullScreen: true,
+  },
+  {
+    path: '/profile',
+    element: <ProfilePage />,
     unAuthenticated: true,
     fullScreen: true,
   },
