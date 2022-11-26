@@ -8,11 +8,13 @@
     "darkMode": "Dark Mode",
     "language": "Language"
   },
+  "profile": {
+    "title": "Profile"
+  },
   "mainMenu": {
     "routes": "Routes",
-    "favorites": "Favorites",
-    "sharing": "Sharing",
-    "profile": "Profile"
+    "points": "Points",
+    "games": "Games",
+    "sharing": "Sharing"
   }
-};
-
+}

@@ -8,8 +8,15 @@ import {
 import routes from 'routes';
 import {useTranslation} from 'react-i18next';
 import {BottomNavigation} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import AppHeader from 'components/menu/AppHeader';
 
-const Route = () => <Outlet />;
+const Route = () => (
+  <View>
+    <AppHeader />
+    <Outlet />
+  </View>
+);
 
 const menuRoutes = routes.filter(route => route.mainMenu);
 
@@ -37,11 +44,18 @@ const MainMenu = () => {
   const renderScene = BottomNavigation.SceneMap(routeOutlet);
   return (
     <BottomNavigation
+      barStyle={styles.bar}
       navigationState={{index: route?.index || 0, routes: navigationRoutes}}
       onIndexChange={redirect}
       renderScene={renderScene}
     />
   );
 };
+
+const styles = StyleSheet.create({
+  bar: {
+    height: 75,
+  },
+});
 
 export default MainMenu;

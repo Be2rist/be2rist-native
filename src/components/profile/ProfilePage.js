@@ -8,6 +8,7 @@ import {
   List,
   IconButton,
   TouchableRipple,
+  Appbar,
 } from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {selectUser} from 'services/redux/userSlice';
@@ -38,6 +39,7 @@ const ProfilePage = () => {
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    flex: 1,
   };
 
   const onSignOut = () => auth().signOut();
@@ -51,6 +53,10 @@ const ProfilePage = () => {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
+        <Appbar.Header>
+          <Appbar.BackAction onPress={() => navigate('/')} />
+          <Appbar.Content title={t('profile.title')} />
+        </Appbar.Header>
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,

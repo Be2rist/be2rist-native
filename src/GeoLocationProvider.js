@@ -32,7 +32,11 @@ const GeoLocationProvider = ({children}) => {
         fastestInterval: 500,
       },
     );
-    return () => Geolocation.clearWatch(id);
+    return () => {
+      if (id) {
+        Geolocation.clearWatch(id);
+      }
+    };
   }, [enabled, error, errorsCount]);
 
   return (
