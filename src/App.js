@@ -28,17 +28,13 @@ const Main = () => {
   const [initializing, setInitializing] = useState(true);
   const {settings} = useContext(SettingsContext);
 
-  useEffect(
-    () =>
-      auth().onAuthStateChanged(user => {
-        dispatch(userChanged(user));
-        if (initializing) {
-          setInitializing(false);
-        }
-      }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged(user => {
+      dispatch(userChanged(user));
+      setInitializing(false);
+    });
+    return () => unsubscribe();
+  }, [dispatch]);
 
   return initializing ? (
     <Preloader loading />

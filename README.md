@@ -18,14 +18,7 @@ This react-native project for mobile platforms.
 - Create new file project.properties in the android folder and put [key params](https://developer.android.com/studio/publish/app-signing).
 - Put GEO_API_KEY into the project.properties to link GOOGLE_MAPS [GEO_API_KEY](https://developers.google.com/maps/documentation/geolocation/get-api-key).
 - Add google-services.json to the android/app folder [Manual Step3](https://firebase.google.com/docs/android/setup)
-- Open android folder and run "Link to Gradle" in the popup menu
-- Run "reload gradle project"
-
-> Note: To force application to use High-Accuracy Geo position go to [PlayServicesLocationManager](node_modules/@react-native-community/geolocation/android/src/main/java/com/reactnativecommunity/geolocation/PlayServicesLocationManager.java) and change code below.
-> !!!Need to find out the way how to set PRIORITY_HIGH_ACCURACY from the configuration. enableHighAccuracy option not working!!!
->>locationRequest.setPriority(locationOptions.highAccuracy ? LocationRequest.PRIORITY_HIGH_ACCURACY : LocationRequest.PRIORITY_LOW_POWER);
->> => 
->>locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+- For Intellij Idea: Open android folder and run "Link to Gradle" in the popup menu and run "reload gradle project"
 
 ## Running
 - To start locally run ``npm run-script android`` or ``android`` script from package.json

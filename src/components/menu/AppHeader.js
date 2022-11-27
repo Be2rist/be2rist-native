@@ -6,6 +6,7 @@ import {StyleSheet} from 'react-native';
 import {useNavigate} from 'react-router-native';
 import {SettingsContext} from 'SettingsProvider';
 import UserAvatar from 'components/menu/UserAvatar';
+import {GeoLocationContext} from 'GeoLocationProvider';
 
 const AppHeader = () => {
   const user = useSelector(state => selectUser(state));
@@ -14,10 +15,12 @@ const AppHeader = () => {
     settings: {theme},
   } = useContext(SettingsContext);
   const isDarkMode = theme === 'dark';
+  const {enabled: gpsEnabled} = useContext(GeoLocationContext);
 
   return (
     <Appbar.Header style={styles.header}>
       <Appbar.Content title="B2rist" />
+      {!gpsEnabled && <Appbar.Action icon="map-marker-off" color="red" />}
       <TouchableRipple
         onPress={() => navigate('/profile')}
         rippleColor="rgba(0, 0, 0, .32)"
