@@ -6,7 +6,7 @@ const GeoLocationContext = createContext();
 
 const GeoLocationProvider = ({children}) => {
   const [position, setPosition] = useState({});
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(true);
   const [error, setError] = useState();
 
   useEffect(() => {
