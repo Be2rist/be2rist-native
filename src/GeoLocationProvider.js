@@ -1,37 +1,30 @@
 import React, {createContext, useEffect, useState} from 'react';
-import Geolocation from '@react-native-community/geolocation';
 import {enableLatestRenderer} from 'react-native-maps';
+import Geolocation from 'react-native-geolocation-service';
+import {PermissionsAndroid} from 'react-native';
+
+const requestGeoLocation = async () =>
+  (await PermissionsAndroid.check(
+    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  )) ||
+  (await PermissionsAndroid.request(
+    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  )) === PermissionsAndroid.RESULTS.GRANTED;
 
 const GeoLocationContext = createContext();
 
 const GeoLocationProvider = ({children}) => {
   const [position, setPosition] = useState({});
   const [initialized, setInitialized] = useState(false);
-  const [enabled, setEnabled] = useState(true);
+  const [enabled, setEnabled] = useState(false);
   const [error, setError] = useState();
 
   useEffect(() => {
     if (!initialized) {
       enableLatestRenderer();
-      Geolocation.setRNConfiguration({
-        distanceFilter: 1,
-        desiredAccuracy: {
-          ios: 'best',
-          android: 'highAccuracy',
-        },
-        headingOrientation: 'portrait',
-        // Android ONLY
-        androidProvider: 'auto',
-        interval: 1000, // Milliseconds
-        fastestInterval: 2000, // Milliseconds
-        maxWaitTime: 5000, // Milliseconds
-        // IOS ONLY
-        allowsBackgroundLocationUpdates: false,
-        headingFilter: 1, // Degrees
-        pausesLocationUpdatesAutomatically: false,
-        showsBackgroundLocationIndicator: true,
-      });
-      setInitialized(true);
+      requestGeoLocation().then(
+        result => setInitialized(result) && setEnabled(result),
+      );
     }
   }, [initialized]);
 
@@ -40,16 +33,17 @@ const GeoLocationProvider = ({children}) => {
     if (initialized) {
       id = Geolocation.watchPosition(
         ({coords}) => {
-          !enabled && setEnabled(true);
-          error && setError(null);
+          setEnabled(true);
+          setError(null);
           setPosition(coords);
         },
         e => {
-          !error && setError(e);
+          setError(e);
           setEnabled(false);
         },
         {
           enableHighAccuracy: true,
+          distanceFilter: 1,
         },
       );
     }
