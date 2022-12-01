@@ -1,37 +1,159 @@
-import React, {useContext} from 'react';
-import {SafeAreaView, ScrollView, StatusBar, View} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import Section from 'components/root/Section';
-import {SettingsContext} from 'SettingsProvider';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import {useSelector} from 'react-redux';
+import {selectPointPage} from 'services/redux/pointSlice';
+import {Platform, Slider, StyleSheet, View} from 'react-native';
+import GoogleMapView from 'components/googlemaps/GoogleMapView';
+import {Marker} from 'react-native-maps';
+import {GeoLocationContext, GeolocationFlow} from 'GeoLocationProvider';
+import {
+  Banner,
+  Button,
+  Card,
+  IconButton,
+  Avatar,
+  Modal,
+  Portal,
+} from 'react-native-paper';
+import MediaResolver from 'components/player/MediaResolver';
+import {useNavigate, createSearchParams} from 'react-router-native';
+import useNearbyPoint from 'components/point/useNearbyPoint';
+
+const MapMarker = props => <Avatar.Icon {...props} icon="map-marker" />;
+
+const PlayButton = (props, onPress) => (
+  <IconButton {...props} icon="play-box-outline" onPress={onPress} />
+);
 
 const PointsPage = () => {
-  const {
-    settings: {theme},
-  } = useContext(SettingsContext);
-  const isDarkMode = theme === 'dark';
+  const navigate = useNavigate();
+  const points = useSelector(state => selectPointPage(state));
+  const startPosition = useMemo(() => GeolocationFlow.location, []);
+  const {position, enabled: gpsEnabled} = useContext(GeoLocationContext);
+  const [playingPoint, setPlayingPoint] = useState(null);
+  const [played, setPlayed] = useState([]);
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [nearbyPoint, distance, reached] = useNearbyPoint(
+    points.list,
+    position,
+    gpsEnabled,
+  );
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  useEffect(() => {
+    nearbyPoint &&
+      reached &&
+      playingPoint?.id !== nearbyPoint.id &&
+      !played.includes(nearbyPoint.id) &&
+      setPlayingPoint(nearbyPoint);
+  }, [nearbyPoint, played, playingPoint, reached]);
+
+  const onClose = useCallback(() => {
+    setPlayed([...played, playingPoint.id]);
+    setPlayingPoint(null);
+  }, [played, playingPoint]);
+
+  const onValueChanged = useCallback(
+    value =>
+      navigate({
+        pathname: '/points',
+        search: `?${createSearchParams({radius: value})}`,
+      }),
+    [navigate],
+  );
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Points Page" />
+    <>
+      <Portal>
+        <Modal
+          visible={!!playingPoint}
+          onDismiss={onClose}
+          contentContainerStyle={styles.modal}>
+          {playingPoint && (
+            <MediaResolver point={playingPoint} close={onClose} />
+          )}
+        </Modal>
+      </Portal>
+      <Banner
+        visible={filterVisible}
+        actions={[
+          {
+            label: 'Close',
+            onPress: () => setFilterVisible(false),
+          },
+        ]}>
+        <Slider
+          onSlidingComplete={onValueChanged}
+          value={+points.page.radius}
+          minimumValue={0}
+          maximumValue={25}
+          maximumTrackTintColor="gray"
+          minimumTrackTintColor={'white'}
+          thumbTintColor={'white'}
+          style={styles.slider}
+        />
+      </Banner>
+      {!filterVisible && (
+        <View style={styles.moreButton}>
+          <Button onPress={() => setFilterVisible(true)}>... More</Button>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      )}
+      <View style={styles.container}>
+        <GoogleMapView position={startPosition}>
+          {points.list.map(point => (
+            <Marker
+              key={point.id}
+              title={point.name}
+              onPress={() => setPlayingPoint(point)}
+              coordinate={{
+                latitude: point.location._latitude,
+                longitude: point.location._longitude,
+              }}
+            />
+          ))}
+        </GoogleMapView>
+      </View>
+      {nearbyPoint && (
+        <Card>
+          <Card.Title
+            title={nearbyPoint.name}
+            subtitle={`${distance} m`}
+            left={MapMarker}
+            right={props =>
+              PlayButton(props, () => setPlayingPoint(nearbyPoint))
+            }
+          />
+        </Card>
+      )}
+    </>
   );
 };
+
+const styles = StyleSheet.create({
+  modal: {
+    marginTop: -20,
+    flex: 1,
+  },
+  moreButton: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  container: {
+    marginTop: 10,
+    height: 400,
+  },
+  slider: {
+    width: 300,
+    height: 30,
+    borderRadius: 50,
+    flex: 1,
+    alignSelf: 'center',
+    marginHorizontal: Platform.select({ios: 5}),
+  },
+});
 
 export default PointsPage;

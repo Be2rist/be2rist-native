@@ -11,7 +11,17 @@ const requestGeoLocation = async () =>
     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
   )) === PermissionsAndroid.RESULTS.GRANTED;
 
+/**
+ * Stores coordinates for using inside React components. The coords changes will trigger re-rendering.
+ * @type {React.Context}
+ */
 const GeoLocationContext = createContext();
+
+/**
+ * Stores current Geolocation coordinates for using out of React components.
+ * @type {{location: {}, enabled: boolean}}
+ */
+const GeolocationFlow = {enabled: false, location: {}};
 
 const GeoLocationProvider = ({children}) => {
   const [position, setPosition] = useState({});
@@ -33,11 +43,14 @@ const GeoLocationProvider = ({children}) => {
     if (initialized) {
       id = Geolocation.watchPosition(
         ({coords}) => {
+          GeolocationFlow.location = coords;
+          GeolocationFlow.enabled = true;
           setEnabled(true);
           setError(null);
           setPosition(coords);
         },
         e => {
+          GeolocationFlow.enabled = false;
           setError(e);
           setEnabled(false);
         },
@@ -61,4 +74,4 @@ const GeoLocationProvider = ({children}) => {
   );
 };
 
-export {GeoLocationContext, GeoLocationProvider};
+export {GeoLocationContext, GeoLocationProvider, GeolocationFlow};

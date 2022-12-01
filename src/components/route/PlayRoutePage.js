@@ -1,78 +1,32 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {SafeAreaView, ScrollView, StatusBar, View} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {useSelector} from 'react-redux';
 import {selectRoute} from 'services/redux/routeSlice';
-import AudioPlayer from 'components/player/AudioPlayer';
-import {SettingsContext} from 'SettingsProvider';
 import RouteCard from 'components/route/RouteCard';
-import {Text} from 'react-native-paper';
-import {getDistance} from 'geolib';
 import {GeoLocationContext} from 'GeoLocationProvider';
 import CloseButton from 'components/custom/CloseButton';
 import PlayRoutePreview from 'components/route/PlayRoutePreview';
-
-// TODO: Move to the firebase #8
-const pointArea = 20;
+import MediaResolver from 'components/player/MediaResolver';
+import BackgroundScrollView from 'components/custom/BackgroundScrollView';
+import useNearbyPoint from 'components/point/useNearbyPoint';
 
 const PlayRoutePage = () => {
   const route = useSelector(state => selectRoute(state));
   const [pointIndex, setPointIndex] = useState(null);
-  const [nearbyPoint, setNearbyPoint] = useState(null);
   const [playRoute, setPlayRoute] = useState(false);
-  const {
-    settings: {theme},
-  } = useContext(SettingsContext);
-  const isDarkMode = theme === 'dark';
   const {position, enabled: gpsEnabled} = useContext(GeoLocationContext);
+  const [nearbyPoint, distance, reached, nearbyIndex] = useNearbyPoint(
+    route?.points,
+    position,
+    gpsEnabled,
+  );
 
   useEffect(() => {
-    if (gpsEnabled) {
-      let closeIn = route?.points
-        .map((item, index) => {
-          const location = {
-            latitude: item.location._latitude,
-            longitude: item.location._longitude,
-          };
-          return {index, distance: getDistance(position, location)};
-        })
-        .sort((a, b) => b.distance - a.distance)
-        .pop();
-      setNearbyPoint(closeIn?.distance);
-      if (
-        closeIn?.distance < pointArea &&
-        pointIndex !== closeIn.index + 1 &&
-        playRoute
-      ) {
-        setPointIndex(closeIn.index + 1);
-      }
-    }
-  }, [gpsEnabled, playRoute, pointIndex, position, route?.points]);
-
-  const mediaResolver = currentPoint => {
-    switch (currentPoint.contentType) {
-      case 'sound-collage':
-        return (
-          <AudioPlayer
-            key={currentPoint.id}
-            point={currentPoint}
-            close={stopPlaying}
-            disablePointControls={gpsEnabled}
-            showNext={showNext}
-            showPrevious={showPrevious}
-            isFirst={pointIndex === 1}
-            isLast={route.points.length === pointIndex}
-          />
-        );
-      default:
-        return <View />;
-    }
-  };
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    flex: 1,
-  };
+    nearbyPoint &&
+      reached &&
+      pointIndex !== nearbyIndex + 1 &&
+      playRoute &&
+      setPointIndex(nearbyIndex + 1);
+  }, [distance, nearbyIndex, nearbyPoint, playRoute, pointIndex, reached]);
 
   const showPrevious = () => {
     if (pointIndex > 1) {
@@ -99,29 +53,26 @@ const PlayRoutePage = () => {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        {route && !pointIndex && (
-          <>
-            <CloseButton />
-            {gpsEnabled && <Text>{nearbyPoint}</Text>}
-            {gpsEnabled && playRoute && <PlayRoutePreview route={route} />}
-            {!playRoute && <RouteCard route={route} onPlay={onPlayRoute} />}
-          </>
-        )}
-        {route &&
-          playRoute &&
-          pointIndex &&
-          route.points[pointIndex - 1] &&
-          mediaResolver(route.points[pointIndex - 1])}
-      </ScrollView>
-    </SafeAreaView>
+    <BackgroundScrollView>
+      {route && !pointIndex && (
+        <>
+          <CloseButton />
+          {gpsEnabled && playRoute && <PlayRoutePreview route={route} />}
+          {!playRoute && <RouteCard route={route} onPlay={onPlayRoute} />}
+        </>
+      )}
+      {route && playRoute && pointIndex && route.points[pointIndex - 1] && (
+        <MediaResolver
+          point={route.points[pointIndex - 1]}
+          close={stopPlaying}
+          disablePointControls={gpsEnabled}
+          showNext={showNext}
+          showPrevious={showPrevious}
+          isFirst={pointIndex === 1}
+          isLast={route.points.length === pointIndex}
+        />
+      )}
+    </BackgroundScrollView>
   );
 };
 

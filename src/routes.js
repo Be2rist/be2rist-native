@@ -1,5 +1,6 @@
 import React, {lazy} from 'react';
 import {getRouteById} from 'services/redux/routeSlice';
+import {getNearbyPoints} from 'services/redux/pointSlice';
 
 const LoginPage = lazy(() => import('components/login/LoginPage'));
 const SharingPage = lazy(() => import('components/sharing/SharingPage'));
@@ -38,6 +39,7 @@ const routes = [
     mainMenu: true,
     index: 1,
     unAuthenticated: true,
+    actions: [params => getNearbyPoints(params)],
   },
   {
     path: '/games',
