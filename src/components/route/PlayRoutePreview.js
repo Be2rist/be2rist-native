@@ -1,18 +1,12 @@
-import React, {useContext, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Marker} from 'react-native-maps';
 import PropTypes from 'prop-types';
 import GoogleMapView from 'components/googlemaps/GoogleMapView';
-import {GeoLocationContext} from 'GeoLocationProvider';
+import {GeolocationFlow} from 'GeoLocationProvider';
 
 const PlayRoutePreview = ({route}) => {
-  const {position, enabled: gpsEnabled} = useContext(GeoLocationContext);
-  const startPosition = useMemo(
-    () =>
-      gpsEnabled && position.latitude ? position : {latitude: 0, longitude: 0},
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [gpsEnabled],
-  );
+  const startPosition = useMemo(() => GeolocationFlow.location, []);
   return (
     <View style={styles.container}>
       <GoogleMapView position={startPosition}>

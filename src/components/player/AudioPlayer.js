@@ -9,6 +9,7 @@ import {
   Platform,
   Slider,
   View,
+  TouchableOpacity,
 } from 'react-native';
 
 const getAudioTimeString = seconds => {
@@ -190,7 +191,10 @@ const AudioPlayer = ({
   }, [showPrevious, sound]);
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      activeOpacity={1}
+      style={styles.container}
+      onPress={clickPause}>
       <ImageBackground
         source={{uri: currentImage.image}}
         resizeMethod="resize"
@@ -224,13 +228,10 @@ const AudioPlayer = ({
           </>
         )}
         <View style={styles.playButton}>
-          {soundLoaded ? (
-            <IconButton
-              icon={playState === 'paused' ? 'play' : 'pause'}
-              size={50}
-              onPress={clickPause}
-            />
-          ) : (
+          {soundLoaded && playState === 'paused' && (
+            <IconButton icon={'play'} size={50} onPress={clickPause} />
+          )}
+          {!soundLoaded && (
             <ActivityIndicator
               size={45}
               animating={true}
@@ -255,7 +256,7 @@ const AudioPlayer = ({
           <Text style={styles.duration}>{durationString}</Text>
         </View>
       </ImageBackground>
-    </View>
+    </TouchableOpacity>
   );
 };
 

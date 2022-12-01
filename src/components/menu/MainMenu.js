@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useCallback, useContext, useMemo} from 'react';
 import {
   matchRoutes,
   Outlet,
@@ -8,15 +8,18 @@ import {
 import routes from 'routes';
 import {useTranslation} from 'react-i18next';
 import {BottomNavigation} from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 import AppHeader from 'components/menu/AppHeader';
+import {SettingsContext} from 'SettingsProvider';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-const Route = () => (
-  <View>
-    <AppHeader />
-    <Outlet />
-  </View>
-);
+const Route = () => null;
 
 const menuRoutes = routes.filter(route => route.mainMenu);
 
@@ -27,35 +30,74 @@ const routeOutlet = menuRoutes
     return acc;
   }, {});
 
+const renderScene = BottomNavigation.SceneMap(routeOutlet);
+
 const MainMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const {t} = useTranslation();
   const navigationRoutes = useMemo(
     () =>
-      menuRoutes.map(item => ({...item, title: t(`mainMenu.${item.title}`)})),
+      menuRoutes.map(item => ({
+        ...item,
+        title: t(`mainMenu.${item.title}`),
+      })),
     [t],
   );
 
-  const [{route}] = matchRoutes(routes, location);
-  const redirect = next =>
-    navigate(menuRoutes.find(item => item.index === next)?.path || '/');
+  const redirect = useCallback(
+    next => {
+      navigate(menuRoutes.find(item => item.index === next)?.path || '/');
+    },
+    [navigate],
+  );
 
-  const renderScene = BottomNavigation.SceneMap(routeOutlet);
+  const [{route}] = matchRoutes(routes, location);
+
+  const {
+    settings: {theme},
+  } = useContext(SettingsContext);
+  const isDarkMode = theme === 'dark';
+
+  const backgroundStyle = useMemo(
+    () => ({
+      backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+      flex: 1,
+    }),
+    [isDarkMode],
+  );
+
   return (
-    <BottomNavigation
-      barStyle={styles.bar}
-      navigationState={{index: route?.index || 0, routes: navigationRoutes}}
-      onIndexChange={redirect}
-      renderScene={renderScene}
-    />
+    <SafeAreaView style={backgroundStyle}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
+      <AppHeader />
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        style={backgroundStyle}>
+        <Outlet />
+      </ScrollView>
+      <View style={styles.bottomNavigation}>
+        <BottomNavigation
+          barStyle={styles.bar}
+          navigationState={{
+            index: route?.index || 0,
+            routes: navigationRoutes,
+          }}
+          onIndexChange={redirect}
+          renderScene={renderScene}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  bar: {
-    height: 75,
+  bottomNavigation: {
+    flex: 0.13,
   },
 });
 
-export default MainMenu;
+export default React.memo(MainMenu);

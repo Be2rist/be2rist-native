@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {SafeAreaView, ScrollView, StatusBar, View} from 'react-native';
+import {View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {
   Avatar,
@@ -17,6 +17,7 @@ import {useNavigate} from 'react-router-native';
 import {useTranslation} from 'react-i18next';
 import {SettingsContext} from 'SettingsProvider';
 import ChevronIcon from 'components/custom/ChevronIcon';
+import BackgroundScrollView from 'components/custom/BackgroundScrollView';
 
 const LogoutButton = (props, onSignOut) => (
   <IconButton {...props} icon="logout" onPress={onSignOut} />
@@ -37,52 +38,39 @@ const ProfilePage = () => {
   } = useContext(SettingsContext);
   const isDarkMode = theme === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    flex: 1,
-  };
-
   const onSignOut = () => auth().signOut();
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Appbar.Header>
-          <Appbar.BackAction onPress={() => navigate('/')} />
-          <Appbar.Content title={t('profile.title')} />
-        </Appbar.Header>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          {user ? (
-            <Card.Title
-              title={user.displayName}
-              subtitle={user.email}
-              left={props => ProfileAvatar(props, user)}
-              right={props => LogoutButton(props, onSignOut)}
-            />
-          ) : (
-            <Button onPress={() => navigate('/login')}>{t('login')}</Button>
-          )}
-        </View>
-        <TouchableRipple
-          onPress={() => navigate('/settings')}
-          rippleColor="rgba(0, 0, 0, .32)">
-          <List.Item
-            title={t('settings.title')}
-            left={SettingsIcon}
-            right={ChevronIcon}
+    <BackgroundScrollView>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigate('/')} />
+        <Appbar.Content title={t('profile.title')} />
+      </Appbar.Header>
+      <View
+        style={{
+          backgroundColor: isDarkMode ? Colors.black : Colors.white,
+        }}>
+        {user ? (
+          <Card.Title
+            title={user.displayName}
+            subtitle={user.email}
+            left={props => ProfileAvatar(props, user)}
+            right={props => LogoutButton(props, onSignOut)}
           />
-        </TouchableRipple>
-      </ScrollView>
-    </SafeAreaView>
+        ) : (
+          <Button onPress={() => navigate('/login')}>{t('login')}</Button>
+        )}
+      </View>
+      <TouchableRipple
+        onPress={() => navigate('/settings')}
+        rippleColor="rgba(0, 0, 0, .32)">
+        <List.Item
+          title={t('settings.title')}
+          left={SettingsIcon}
+          right={ChevronIcon}
+        />
+      </TouchableRipple>
+    </BackgroundScrollView>
   );
 };
 
