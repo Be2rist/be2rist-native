@@ -207,7 +207,7 @@ const AudioPlayer = ({
             disabled={!soundLoaded}
           />
         </View>
-        {!disablePointControls && (
+        {!disablePointControls && soundLoaded && playState === 'paused' && (
           <>
             <View style={styles.previousButton}>
               <IconButton

@@ -1,26 +1,17 @@
 import React, {useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Marker} from 'react-native-maps';
 import PropTypes from 'prop-types';
 import GoogleMapView from 'components/googlemaps/GoogleMapView';
-import {GeolocationFlow} from 'GeoLocationProvider';
+import NewMarkers from 'components/custom/NewMarkers';
 
 const PlayRoutePreview = ({route}) => {
-  const startPosition = useMemo(() => GeolocationFlow.location, []);
+  const Markers = useMemo(
+    () => <NewMarkers points={route.points} />,
+    [route.points],
+  );
   return (
     <View style={styles.container}>
-      <GoogleMapView position={startPosition}>
-        {route.points.map(({id, name, location}) => (
-          <Marker
-            key={id}
-            title={name}
-            coordinate={{
-              latitude: location._latitude,
-              longitude: location._longitude,
-            }}
-          />
-        ))}
-      </GoogleMapView>
+      <GoogleMapView children={Markers} />
     </View>
   );
 };
@@ -34,8 +25,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlayRoutePreview;
+const Memo = React.memo(PlayRoutePreview);
 
-PlayRoutePreview.propTypes = {
+export default Memo;
+
+Memo.propTypes = {
   route: PropTypes.object.isRequired,
 };

@@ -3,8 +3,9 @@ import React, {useContext} from 'react';
 import {SettingsContext} from 'SettingsProvider';
 import {StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
+import {GeolocationFlow} from 'GeoLocationProvider';
 
-const GoogleMapView = ({position, children}) => {
+const GoogleMapView = ({children}) => {
   const {
     settings: {theme},
   } = useContext(SettingsContext);
@@ -17,7 +18,11 @@ const GoogleMapView = ({position, children}) => {
       userLocationPriority="high"
       showsIndoorLevelPicker
       userInterfaceStyle={theme}
-      region={{...position, latitudeDelta: 0, longitudeDelta: 0}}>
+      initialRegion={{
+        ...GeolocationFlow.location,
+        latitudeDelta: 0,
+        longitudeDelta: 0,
+      }}>
       {children}
     </MapView>
   );
@@ -29,10 +34,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GoogleMapView;
+export default React.memo(GoogleMapView);
 
 GoogleMapView.propTypes = {
-  position: PropTypes.object.isRequired,
   children: PropTypes.node,
 };
 

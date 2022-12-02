@@ -2,11 +2,12 @@ import React, {useContext} from 'react';
 import {Appbar, TouchableRipple} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {selectUser} from 'services/redux/userSlice';
-import {StyleSheet} from 'react-native';
+import {Image, StyleSheet} from 'react-native';
 import {useNavigate} from 'react-router-native';
 import {SettingsContext} from 'SettingsProvider';
 import UserAvatar from 'components/menu/UserAvatar';
 import {GeoLocationContext} from 'GeoLocationProvider';
+import {LOGO} from 'images';
 
 const AppHeader = () => {
   const user = useSelector(state => selectUser(state));
@@ -19,7 +20,8 @@ const AppHeader = () => {
 
   return (
     <Appbar.Header style={styles.header}>
-      <Appbar.Content title="B2rist" />
+      <Image source={LOGO} style={styles.logoImage} />
+      <Appbar.Content title="B2rist" style={styles.title} />
       {!gpsEnabled && <Appbar.Action icon="map-marker-off" color="red" />}
       <TouchableRipple
         onPress={() => navigate('/profile')}
@@ -35,6 +37,13 @@ const AppHeader = () => {
 const styles = StyleSheet.create({
   header: {
     height: 50,
+  },
+  logoImage: {
+    width: 44,
+    height: 30,
+  },
+  title: {
+    marginLeft: 10,
   },
   avatarRipple: {
     borderRadius: 50,
