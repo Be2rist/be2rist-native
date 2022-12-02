@@ -9,8 +9,7 @@ import {useSelector} from 'react-redux';
 import {selectPointPage} from 'services/redux/pointSlice';
 import {Platform, Slider, StyleSheet, View} from 'react-native';
 import GoogleMapView from 'components/googlemaps/GoogleMapView';
-import {Marker} from 'react-native-maps';
-import {GeoLocationContext, GeolocationFlow} from 'GeoLocationProvider';
+import {GeoLocationContext} from 'GeoLocationProvider';
 import {
   Banner,
   Button,
@@ -23,6 +22,7 @@ import {
 import MediaResolver from 'components/player/MediaResolver';
 import {useNavigate, createSearchParams} from 'react-router-native';
 import useNearbyPoint from 'components/point/useNearbyPoint';
+import NewMarkers from 'components/custom/NewMarkers';
 
 const MapMarker = props => <Avatar.Icon {...props} icon="map-marker" />;
 
@@ -33,7 +33,6 @@ const PlayButton = (props, onPress) => (
 const PointsPage = () => {
   const navigate = useNavigate();
   const points = useSelector(state => selectPointPage(state));
-  const startPosition = useMemo(() => GeolocationFlow.location, []);
   const {position, enabled: gpsEnabled} = useContext(GeoLocationContext);
   const [playingPoint, setPlayingPoint] = useState(null);
   const [played, setPlayed] = useState([]);
@@ -64,6 +63,17 @@ const PointsPage = () => {
         search: `?${createSearchParams({radius: value})}`,
       }),
     [navigate],
+  );
+
+  const onSetPlayingPoint = useCallback(point => {
+    setPlayingPoint(point);
+  }, []);
+
+  const Markers = useMemo(
+    () => (
+      <NewMarkers points={points.list} setPlayingPoint={onSetPlayingPoint} />
+    ),
+    [onSetPlayingPoint, points],
   );
 
   return (
@@ -103,19 +113,7 @@ const PointsPage = () => {
         </View>
       )}
       <View style={styles.container}>
-        <GoogleMapView position={startPosition}>
-          {points.list.map(point => (
-            <Marker
-              key={point.id}
-              title={point.name}
-              onPress={() => setPlayingPoint(point)}
-              coordinate={{
-                latitude: point.location._latitude,
-                longitude: point.location._longitude,
-              }}
-            />
-          ))}
-        </GoogleMapView>
+        <GoogleMapView children={Markers} />
       </View>
       {nearbyPoint && (
         <Card>

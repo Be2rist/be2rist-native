@@ -65,7 +65,7 @@ const PlayRoutePage = () => {
         <MediaResolver
           point={route.points[pointIndex - 1]}
           close={stopPlaying}
-          disablePointControls={gpsEnabled}
+          disableControls={gpsEnabled}
           showNext={showNext}
           showPrevious={showPrevious}
           isFirst={pointIndex === 1}

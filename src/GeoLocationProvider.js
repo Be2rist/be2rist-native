@@ -43,8 +43,10 @@ const GeoLocationProvider = ({children}) => {
     if (initialized) {
       id = Geolocation.watchPosition(
         ({coords}) => {
-          GeolocationFlow.location = coords;
-          GeolocationFlow.enabled = true;
+          if (!enabled) {
+            GeolocationFlow.location = coords;
+            GeolocationFlow.enabled = true;
+          }
           setEnabled(true);
           setError(null);
           setPosition(coords);
@@ -69,7 +71,7 @@ const GeoLocationProvider = ({children}) => {
 
   return (
     <GeoLocationContext.Provider value={{position, enabled, error}}>
-      {children}
+      {initialized ? children : null}
     </GeoLocationContext.Provider>
   );
 };
