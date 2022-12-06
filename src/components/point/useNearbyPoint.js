@@ -4,7 +4,7 @@ import {getDistance} from 'geolib';
 // TODO: Move to the firebase #8
 const pointArea = 20;
 
-const useNearbyPoint = (points = [], position, gpsEnabled) => {
+const useNearbyPoint = (points, position, gpsEnabled) => {
   const [point, setPoint] = useState(null);
   const [index, setIndex] = useState(null);
   const [reached, setReached] = useState(false);
