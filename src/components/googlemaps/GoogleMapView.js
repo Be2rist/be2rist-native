@@ -14,14 +14,14 @@ const GoogleMapView = ({children}) => {
       style={styles.map}
       provider={PROVIDER_GOOGLE}
       showsUserLocation
-      maxZoomLevel={18}
+      maxZoomLevel={20}
       userLocationPriority="high"
       showsIndoorLevelPicker
       userInterfaceStyle={theme}
       initialRegion={{
         ...GeolocationFlow.location,
-        latitudeDelta: 0,
-        longitudeDelta: 0,
+        latitudeDelta: 0.00922,
+        longitudeDelta: 0.00922,
       }}>
       {children}
     </MapView>

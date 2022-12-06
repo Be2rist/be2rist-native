@@ -1,0 +1,20 @@
+{
+  "login": "Zaloguj się",
+  "error": {
+    "tryLater": "Wystąpił błąd. Spróbuj ponownie później"
+  },
+  "settings": {
+    "title": "Ustawienia",
+    "darkMode": "Ciemny",
+    "language": "Język"
+  },
+  "profile": {
+    "title": "Profil"
+  },
+  "mainMenu": {
+    "routes": "Trasy",
+    "points": "Punkty",
+    "games": "Gry",
+    "sharing": "Dodaj"
+  }
+}

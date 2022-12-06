@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
 import RNLanguageDetector from '@os-team/i18next-react-native-language-detector';
 import * as en from './locales/en/translation.json';
+import * as pl from './locales/pl/translation.json';
 import * as ru from './locales/ru/translation.json';
 import languages from 'languages';
 
@@ -15,6 +16,9 @@ i18n
     resources: {
       en: {
         translation: en,
+      },
+      pl: {
+        translation: pl,
       },
       ru: {
         translation: ru,
