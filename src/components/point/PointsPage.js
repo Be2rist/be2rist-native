@@ -18,6 +18,7 @@ import {
   Avatar,
   Modal,
   Portal,
+  Text,
 } from 'react-native-paper';
 import MediaResolver from 'components/player/MediaResolver';
 import {useNavigate, createSearchParams} from 'react-router-native';
@@ -60,9 +61,9 @@ const PointsPage = () => {
     value =>
       navigate({
         pathname: '/points',
-        search: `?${createSearchParams({radius: value})}`,
+        search: `?${createSearchParams({...points.page, radius: value})}`,
       }),
-    [navigate],
+    [navigate, points.page],
   );
 
   const onSetPlayingPoint = useCallback(point => {
@@ -96,16 +97,21 @@ const PointsPage = () => {
             onPress: () => setFilterVisible(false),
           },
         ]}>
-        <Slider
-          onSlidingComplete={onValueChanged}
-          value={+points.page.radius}
-          minimumValue={0}
-          maximumValue={25}
-          maximumTrackTintColor="gray"
-          minimumTrackTintColor={'white'}
-          thumbTintColor={'white'}
-          style={styles.slider}
-        />
+        <View style={styles.radius}>
+          <IconButton icon="map-marker-radius" />
+          <Slider
+            onSlidingComplete={onValueChanged}
+            value={+points.page.radius}
+            minimumValue={0}
+            maximumValue={25}
+            step={0.1}
+            maximumTrackTintColor="gray"
+            minimumTrackTintColor={'white'}
+            thumbTintColor={'white'}
+            style={styles.slider}
+          />
+          <Text variant="titleMedium">{(+points.page.radius).toFixed(1)}</Text>
+        </View>
       </Banner>
       {!filterVisible && (
         <View style={styles.moreButton}>
@@ -143,6 +149,10 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 10,
     height: 400,
+  },
+  radius: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   slider: {
     width: 300,

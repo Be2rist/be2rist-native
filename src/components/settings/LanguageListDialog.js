@@ -12,14 +12,14 @@ import {useTranslation} from 'react-i18next';
 import languages from 'languages';
 
 const LanguageListDialog = ({visible, hideDialog, changeLanguage}) => {
-  const {i18n} = useTranslation();
+  const {t, i18n} = useTranslation();
   const [value, setValue] = React.useState(i18n.language);
   return (
     <Provider>
       <View>
         <Portal>
           <Dialog visible={visible} onDismiss={hideDialog}>
-            <Dialog.Title>Choose an option</Dialog.Title>
+            <Dialog.Title>{t('settings.chooseLanguage')}</Dialog.Title>
             <Dialog.Content>
               <RadioButton.Group
                 onValueChange={newValue => setValue(newValue)}
