@@ -65,3 +65,4 @@ buck-out/
 /ios/Pods/
 /vendor/bundle/
 /android/app/src/main/assets/index.android.bundle
+/coverage/
