@@ -49,6 +49,8 @@
   },
   "jest": {
     "preset": "react-native",
+    "collectCoverage": true,
+    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
     "transformIgnorePatterns": [
       "node_modules/(?!(react-router-native|@react-native|react-native|@react-native-firebase|react-native-iphone-x-helper|react-native-vector-icons)/)"
     ]
