@@ -18,8 +18,10 @@ export const getNearbyPoints = createAsyncThunk(
   'point/getNearbyPoints',
   async (request, {rejectWithValue, getState}) => {
     try {
+      const {language} = request;
+      delete request.language;
       const params = isEmpty(request)
-        ? getState().point.pointPage.page
+        ? {...getState().point.pointPage.page, languages: [language]}
         : request;
       const response = await functions().httpsCallable('point-getNearbyPoints')(
         {...params, location: GeolocationFlow.location},

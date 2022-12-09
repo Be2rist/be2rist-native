@@ -6,7 +6,8 @@
   "settings": {
     "title": "Ustawienia",
     "darkMode": "Ciemny",
-    "language": "Język"
+    "language": "Język",
+    "chooseLanguage": "Wybierz język"
   },
   "profile": {
     "title": "Profil"
