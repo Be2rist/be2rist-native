@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "test": "jest",
+    "test": "jest --coverage",
     "lint": "eslint .",
     "lint:report": "eslint --output-file eslint_report.json --format json ."
   },
@@ -48,6 +48,11 @@
     "react-test-renderer": "18.1.0"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "collectCoverage": true,
+    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-router-native|@react-native|react-native|@react-native-firebase|react-native-iphone-x-helper|react-native-vector-icons)/)"
+    ]
   }
 }
