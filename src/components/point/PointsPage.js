@@ -77,6 +77,10 @@ const PointsPage = () => {
     [onSetPlayingPoint, points],
   );
 
+  const onSetFilterVisible = () => setFilterVisible(true);
+
+  const onSetNearbyPlayingPoint = point => () => setPlayingPoint(point);
+
   return (
     <>
       <Portal>
@@ -115,7 +119,7 @@ const PointsPage = () => {
       </Banner>
       {!filterVisible && (
         <View style={styles.moreButton}>
-          <Button onPress={() => setFilterVisible(true)}>... More</Button>
+          <Button onPress={onSetFilterVisible}>... More</Button>
         </View>
       )}
       <View style={styles.container}>
@@ -128,7 +132,7 @@ const PointsPage = () => {
             subtitle={`${distance} m`}
             left={MapMarker}
             right={props =>
-              PlayButton(props, () => setPlayingPoint(nearbyPoint))
+              PlayButton(props, onSetNearbyPlayingPoint(nearbyPoint))
             }
           />
         </Card>

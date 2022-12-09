@@ -14,6 +14,9 @@ import languages from 'languages';
 const LanguageListDialog = ({visible, hideDialog, changeLanguage}) => {
   const {t, i18n} = useTranslation();
   const [value, setValue] = React.useState(i18n.language);
+  const onChange = newValue => setValue(newValue);
+  const onSave = () => changeLanguage(value);
+
   return (
     <Provider>
       <View>
@@ -21,9 +24,7 @@ const LanguageListDialog = ({visible, hideDialog, changeLanguage}) => {
           <Dialog visible={visible} onDismiss={hideDialog}>
             <Dialog.Title>{t('settings.chooseLanguage')}</Dialog.Title>
             <Dialog.Content>
-              <RadioButton.Group
-                onValueChange={newValue => setValue(newValue)}
-                value={value}>
+              <RadioButton.Group onValueChange={onChange} value={value}>
                 {languages.map(lng => (
                   <RadioButton.Item
                     key={lng.lng}
@@ -34,7 +35,7 @@ const LanguageListDialog = ({visible, hideDialog, changeLanguage}) => {
               </RadioButton.Group>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={() => changeLanguage(value)}>OK</Button>
+              <Button onPress={onSave}>OK</Button>
               <Button onPress={hideDialog}>Cancel</Button>
             </Dialog.Actions>
           </Dialog>
