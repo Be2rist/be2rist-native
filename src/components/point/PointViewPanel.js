@@ -3,16 +3,15 @@ import {
   Animated,
   Platform,
   ScrollView,
-  StatusBar,
   StyleSheet,
   useWindowDimensions,
   View,
 } from 'react-native';
 import SlidingUpPanel from 'rn-sliding-up-panel';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import PointView from 'components/point/PointView';
 import useDarkMode from 'components/custom/useDarkMode';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import PropTypes from 'prop-types';
 
 const ios = Platform.OS === 'ios';
 
@@ -20,25 +19,22 @@ const PointViewPanel = ({
   point,
   distance,
   isNearby,
+  mapDimension,
   setPlayingPoint,
   clearPoint,
 }) => {
   const darkMode = useDarkMode();
   const styles = useMemo(() => makeStyles(darkMode), [darkMode]);
   const deviceHeight = useWindowDimensions().height;
-  const insets = useSafeAreaInsets();
-  const statusBarHeight: number = ios ? insets.bottom : StatusBar.currentHeight;
-  const availableViewHeight = useMemo(
-    () => deviceHeight - statusBarHeight - deviceHeight / 7.6,
-    [deviceHeight, statusBarHeight],
-  );
+
   const draggableRange = useMemo(
     () => ({
-      top: availableViewHeight,
+      top: mapDimension.height + 1,
       bottom: deviceHeight / 7.8,
     }),
-    [availableViewHeight, deviceHeight],
+    [deviceHeight, mapDimension.height],
   );
+
   const [scrollEnabled, setScrollEnabled] = useState(false);
   const [allowDragging, setAllowDragging] = useState(true);
   const [atTop, setAtTop] = useState(true);
@@ -108,7 +104,7 @@ const PointViewPanel = ({
       snappingPoints={snappingPoints}
       backdropOpacity={0}
       showBackdrop={false}
-      height={availableViewHeight}
+      height={mapDimension.height}
       allowDragging={allowDragging}
       onMomentumDragEnd={onMomentumDragEnd}
       onDragStart={onDragStart}>
@@ -142,3 +138,15 @@ const makeStyles = isDarkMode =>
   });
 
 export default PointViewPanel;
+
+PointViewPanel.propTypes = {
+  point: PropTypes.object.isRequired,
+  distance: PropTypes.number.isRequired,
+  isNearby: PropTypes.bool.isRequired,
+  mapDimension: PropTypes.shape({
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+  }).isRequired,
+  setPlayingPoint: PropTypes.func.isRequired,
+  clearPoint: PropTypes.func.isRequired,
+};

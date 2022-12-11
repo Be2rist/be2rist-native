@@ -7,33 +7,17 @@ import React, {
 } from 'react';
 import {useSelector} from 'react-redux';
 import {selectPointPage} from 'services/redux/pointSlice';
-import {
-  Platform,
-  Slider,
-  StatusBar,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import GoogleMapView from 'components/googlemaps/GoogleMapView';
 import {GeoLocationContext} from 'GeoLocationProvider';
-import {
-  Banner,
-  Button,
-  IconButton,
-  Modal,
-  Portal,
-  Text,
-} from 'react-native-paper';
+import {Banner, Button, Modal, Portal} from 'react-native-paper';
 import MediaResolver from 'components/player/MediaResolver';
 import {useNavigate, createSearchParams} from 'react-router-native';
 import useNearbyPoint from 'components/point/useNearbyPoint';
 import NewMarkers from 'components/custom/NewMarkers';
 import PointViewPanel from 'components/point/PointViewPanel';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {getDistance} from 'geolib';
-
-const ios = Platform.OS === 'ios';
+import PointFilter from 'components/point/PointFilter';
 
 const PointsPage = () => {
   const navigate = useNavigate();
@@ -48,13 +32,7 @@ const PointsPage = () => {
     gpsEnabled,
   );
   const [viewPoint, setViewPoint] = useState(null);
-  const deviceHeight = useWindowDimensions().height;
-  const insets = useSafeAreaInsets();
-  const statusBarHeight: number = ios ? insets.bottom : StatusBar.currentHeight;
-  const mapAreaHeight = useMemo(
-    () => deviceHeight - statusBarHeight - 60,
-    [deviceHeight, statusBarHeight],
-  );
+  const [mapDimension, setMapDimension] = useState({width: 300, height: 600});
 
   useEffect(() => {
     nearbyPoint &&
@@ -69,7 +47,7 @@ const PointsPage = () => {
     setPlayingPoint(null);
   }, [played, playingPoint]);
 
-  const onValueChanged = useCallback(
+  const onRadiusChanged = useCallback(
     value =>
       navigate({
         pathname: '/points',
@@ -112,6 +90,11 @@ const PointsPage = () => {
 
   const onHideFilter = useCallback(() => setFilterVisible(false), []);
 
+  const findDimensions = useCallback(event => {
+    const {width, height} = event.nativeEvent.layout;
+    setMapDimension({width, height});
+  }, []);
+
   return (
     <>
       <Portal>
@@ -132,33 +115,23 @@ const PointsPage = () => {
             onPress: onHideFilter,
           },
         ]}>
-        <View style={styles.radius}>
-          <IconButton icon="map-marker-radius" />
-          <Slider
-            onSlidingComplete={onValueChanged}
-            value={+points.page.radius}
-            minimumValue={0}
-            maximumValue={25}
-            step={0.1}
-            maximumTrackTintColor="gray"
-            minimumTrackTintColor={'white'}
-            thumbTintColor={'white'}
-            style={styles.slider}
-          />
-          <Text variant="titleMedium">{(+points.page.radius).toFixed(1)}</Text>
-        </View>
+        <PointFilter
+          radius={+points.page.radius}
+          radiusChanged={onRadiusChanged}
+        />
       </Banner>
       {!filterVisible && (
         <Button style={styles.moreButton} onPress={onSetFilterVisible}>
           ... More
         </Button>
       )}
-      <View style={{...styles.container, height: mapAreaHeight}}>
+      <View style={styles.container} onLayout={findDimensions}>
         <GoogleMapView children={Markers} />
       </View>
       {!viewPoint && nearbyPoint && (
         <PointViewPanel
           point={nearbyPoint}
+          mapDimension={mapDimension}
           isNearby
           distance={nearbyDistance}
           clearPoint={onClearViewPoint}
@@ -167,6 +140,7 @@ const PointsPage = () => {
       )}
       {viewPoint && (
         <PointViewPanel
+          mapDimension={mapDimension}
           point={viewPoint}
           isNearby={false}
           distance={viewPointDistance}
@@ -185,24 +159,14 @@ const styles = StyleSheet.create({
   },
   moreButton: {
     position: 'absolute',
-    top: 10,
+    top: 12,
+    right: 60,
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     zIndex: 5000,
   },
   container: {
     marginTop: 0,
-  },
-  radius: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  slider: {
-    width: 300,
-    height: 30,
-    borderRadius: 50,
     flex: 1,
-    alignSelf: 'center',
-    marginHorizontal: Platform.select({ios: 5}),
   },
 });
 
