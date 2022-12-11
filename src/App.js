@@ -12,14 +12,22 @@ import {
 import {SettingsContext} from 'SettingsProvider';
 import NotificationMessageProvider from 'components/root/NotificationMessageProvider';
 import {GeoLocationProvider} from 'GeoLocationProvider';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const defaultTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: 'tomato',
-    secondary: 'yellow',
+    primary: '#00ba00',
     background: 'lightgray',
+  },
+};
+
+const defaultDarkTheme = {
+  ...DefaultDarkTheme,
+  colors: {
+    ...DefaultDarkTheme.colors,
+    primary: '#00ba00',
   },
 };
 
@@ -39,14 +47,16 @@ const Main = () => {
   return initializing ? (
     <Preloader loading />
   ) : (
-    <PaperProvider
-      theme={settings.theme === 'dark' ? DefaultDarkTheme : defaultTheme}>
-      <GeoLocationProvider>
-        <NotificationMessageProvider>
-          <AppRouter />
-        </NotificationMessageProvider>
-      </GeoLocationProvider>
-    </PaperProvider>
+    <SafeAreaProvider>
+      <PaperProvider
+        theme={settings.theme === 'dark' ? defaultDarkTheme : defaultTheme}>
+        <GeoLocationProvider>
+          <NotificationMessageProvider>
+            <AppRouter />
+          </NotificationMessageProvider>
+        </GeoLocationProvider>
+      </PaperProvider>
+    </SafeAreaProvider>
   );
 };
 

@@ -10,7 +10,7 @@ const useNearbyPoint = (points, position, gpsEnabled) => {
   const [reached, setReached] = useState(false);
   const [distance, setDistance] = useState(null);
   useEffect(() => {
-    if (gpsEnabled) {
+    if (gpsEnabled && points) {
       const closeIn = points
         .map((item, ind) => {
           const location = {

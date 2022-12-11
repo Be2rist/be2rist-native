@@ -8,13 +8,7 @@ import {
 import routes from 'routes';
 import {useTranslation} from 'react-i18next';
 import {BottomNavigation} from 'react-native-paper';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 import AppHeader from 'components/menu/AppHeader';
 import {SettingsContext} from 'SettingsProvider';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -74,14 +68,11 @@ const MainMenu = () => {
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <AppHeader />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
+      <View style={backgroundStyle}>
         <Outlet />
-      </ScrollView>
+      </View>
       <View style={styles.bottomNavigation}>
         <BottomNavigation
-          barStyle={styles.bar}
           navigationState={{
             index: route?.index || 0,
             routes: navigationRoutes,
