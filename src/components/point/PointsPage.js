@@ -7,15 +7,20 @@ import React, {
 } from 'react';
 import {useSelector} from 'react-redux';
 import {selectPointPage} from 'services/redux/pointSlice';
-import {Platform, Slider, StyleSheet, View} from 'react-native';
+import {
+  Platform,
+  Slider,
+  StatusBar,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import GoogleMapView from 'components/googlemaps/GoogleMapView';
 import {GeoLocationContext} from 'GeoLocationProvider';
 import {
   Banner,
   Button,
-  Card,
   IconButton,
-  Avatar,
   Modal,
   Portal,
   Text,
@@ -24,12 +29,11 @@ import MediaResolver from 'components/player/MediaResolver';
 import {useNavigate, createSearchParams} from 'react-router-native';
 import useNearbyPoint from 'components/point/useNearbyPoint';
 import NewMarkers from 'components/custom/NewMarkers';
+import PointViewPanel from 'components/point/PointViewPanel';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {getDistance} from 'geolib';
 
-const MapMarker = props => <Avatar.Icon {...props} icon="map-marker" />;
-
-const PlayButton = (props, onPress) => (
-  <IconButton {...props} icon="play-box-outline" onPress={onPress} />
-);
+const ios = Platform.OS === 'ios';
 
 const PointsPage = () => {
   const navigate = useNavigate();
@@ -38,10 +42,18 @@ const PointsPage = () => {
   const [playingPoint, setPlayingPoint] = useState(null);
   const [played, setPlayed] = useState([]);
   const [filterVisible, setFilterVisible] = useState(false);
-  const [nearbyPoint, distance, reached] = useNearbyPoint(
+  const [nearbyPoint, nearbyDistance, reached] = useNearbyPoint(
     points.list,
     position,
     gpsEnabled,
+  );
+  const [viewPoint, setViewPoint] = useState(null);
+  const deviceHeight = useWindowDimensions().height;
+  const insets = useSafeAreaInsets();
+  const statusBarHeight: number = ios ? insets.bottom : StatusBar.currentHeight;
+  const mapAreaHeight = useMemo(
+    () => deviceHeight - statusBarHeight - 60,
+    [deviceHeight, statusBarHeight],
   );
 
   useEffect(() => {
@@ -66,20 +78,39 @@ const PointsPage = () => {
     [navigate, points.page],
   );
 
-  const onSetPlayingPoint = useCallback(point => {
-    setPlayingPoint(point);
+  const onSetViewPoint = useCallback(point => {
+    setViewPoint(point);
+  }, []);
+
+  const onClearViewPoint = useCallback(() => {
+    setViewPoint(null);
   }, []);
 
   const Markers = useMemo(
-    () => (
-      <NewMarkers points={points.list} setPlayingPoint={onSetPlayingPoint} />
-    ),
-    [onSetPlayingPoint, points],
+    () => <NewMarkers points={points.list} setPoint={onSetViewPoint} />,
+    [onSetViewPoint, points],
   );
 
-  const onSetFilterVisible = () => setFilterVisible(true);
+  const onSetFilterVisible = useCallback(() => {
+    setFilterVisible(true);
+  }, []);
 
-  const onSetNearbyPlayingPoint = point => () => setPlayingPoint(point);
+  const onSetViewPlayingPoint = useCallback(
+    point => setPlayingPoint(point),
+    [],
+  );
+
+  const viewPointDistance = useMemo(() => {
+    if (viewPoint) {
+      const location = {
+        latitude: viewPoint.location._latitude,
+        longitude: viewPoint.location._longitude,
+      };
+      return getDistance(position, location);
+    }
+  }, [position, viewPoint]);
+
+  const onHideFilter = useCallback(() => setFilterVisible(false), []);
 
   return (
     <>
@@ -98,7 +129,7 @@ const PointsPage = () => {
         actions={[
           {
             label: 'Close',
-            onPress: () => setFilterVisible(false),
+            onPress: onHideFilter,
           },
         ]}>
         <View style={styles.radius}>
@@ -118,24 +149,30 @@ const PointsPage = () => {
         </View>
       </Banner>
       {!filterVisible && (
-        <View style={styles.moreButton}>
-          <Button onPress={onSetFilterVisible}>... More</Button>
-        </View>
+        <Button style={styles.moreButton} onPress={onSetFilterVisible}>
+          ... More
+        </Button>
       )}
-      <View style={styles.container}>
+      <View style={{...styles.container, height: mapAreaHeight}}>
         <GoogleMapView children={Markers} />
       </View>
-      {nearbyPoint && (
-        <Card>
-          <Card.Title
-            title={nearbyPoint.name}
-            subtitle={`${distance} m`}
-            left={MapMarker}
-            right={props =>
-              PlayButton(props, onSetNearbyPlayingPoint(nearbyPoint))
-            }
-          />
-        </Card>
+      {!viewPoint && nearbyPoint && (
+        <PointViewPanel
+          point={nearbyPoint}
+          isNearby
+          distance={nearbyDistance}
+          clearPoint={onClearViewPoint}
+          setPlayingPoint={onSetViewPlayingPoint}
+        />
+      )}
+      {viewPoint && (
+        <PointViewPanel
+          point={viewPoint}
+          isNearby={false}
+          distance={viewPointDistance}
+          clearPoint={onClearViewPoint}
+          setPlayingPoint={onSetViewPlayingPoint}
+        />
       )}
     </>
   );
@@ -147,12 +184,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   moreButton: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    position: 'absolute',
+    top: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    zIndex: 5000,
   },
   container: {
-    marginTop: 10,
-    height: 400,
+    marginTop: 0,
   },
   radius: {
     flexDirection: 'row',

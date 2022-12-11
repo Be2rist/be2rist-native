@@ -1,14 +1,15 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Marker} from 'react-native-maps';
 import {MARKER} from 'images';
 import PropTypes from 'prop-types';
 
-const NewMarkers = ({points, setPlayingPoint}) =>
-  points.map(point => (
+const NewMarkers = ({points, setPoint}) => {
+  const onSetPoint = useCallback(point => () => setPoint(point), [setPoint]);
+  return points.map(point => (
     <Marker
       key={point.id}
       title={point.name}
-      onPress={() => setPlayingPoint(point)}
+      onPress={onSetPoint(point)}
       image={MARKER}
       coordinate={{
         latitude: point.location._latitude,
@@ -16,6 +17,7 @@ const NewMarkers = ({points, setPlayingPoint}) =>
       }}
     />
   ));
+};
 
 const Memo = React.memo(NewMarkers);
 
@@ -23,9 +25,9 @@ export default Memo;
 
 Memo.propTypes = {
   points: PropTypes.array.isRequired,
-  setPlayingPoint: PropTypes.func,
+  setPoint: PropTypes.func,
 };
 
 Memo.defaultProps = {
-  setPlayingPoint: () => {},
+  setPoint: () => {},
 };
