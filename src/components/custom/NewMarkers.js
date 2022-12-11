@@ -2,6 +2,7 @@ import React, {useCallback} from 'react';
 import {Marker} from 'react-native-maps';
 import {MARKER} from 'images';
 import PropTypes from 'prop-types';
+import {Image, StyleSheet} from 'react-native';
 
 const NewMarkers = ({points, setPoint}) => {
   const onSetPoint = useCallback(point => () => setPoint(point), [setPoint]);
@@ -10,14 +11,22 @@ const NewMarkers = ({points, setPoint}) => {
       key={point.id}
       title={point.name}
       onPress={onSetPoint(point)}
-      image={MARKER}
+      tracksViewChanges={false}
       coordinate={{
         latitude: point.location._latitude,
         longitude: point.location._longitude,
-      }}
-    />
+      }}>
+      <Image source={MARKER} style={styles.markerImage} />
+    </Marker>
   ));
 };
+
+const styles = StyleSheet.create({
+  markerImage: {
+    height: 29,
+    width: 24,
+  },
+});
 
 const Memo = React.memo(NewMarkers);
 
