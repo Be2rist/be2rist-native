@@ -1,4 +1,4 @@
-package com.b2rist;
+package com.be2rist;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -12,7 +12,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "B2rist";
+    return "Be2rist";
   }
 
   /**

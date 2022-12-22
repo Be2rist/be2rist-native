@@ -30,7 +30,7 @@ const ProfileAvatar = (props, user) => (
 const SettingsIcon = props => <List.Icon {...props} icon="cog" />;
 
 const ProfilePage = () => {
-  const user = useSelector(state => selectUser(state));
+  const user = useSelector(selectUser);
   const navigate = useNavigate();
   const {t} = useTranslation();
   const {

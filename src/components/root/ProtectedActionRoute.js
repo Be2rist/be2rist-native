@@ -13,7 +13,7 @@ const ProtectedActionRoute = ({route}) => {
   } = useContext(SettingsContext);
   const pathParams = useParams();
   const dispatch = useDispatch();
-  const user = useSelector(state => selectUser(state));
+  const user = useSelector(selectUser);
   const allowed = useMemo(() => user || route.unAuthenticated, [user, route]);
   useEffect(() => {
     allowed &&

@@ -1,4 +1,4 @@
-package com.b2rist.newarchitecture;
+package com.be2rist.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.b2rist.BuildConfig;
-import com.b2rist.newarchitecture.components.MainComponentsRegistry;
-import com.b2rist.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.be2rist.BuildConfig;
+import com.be2rist.newarchitecture.components.MainComponentsRegistry;
+import com.be2rist.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

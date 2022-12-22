@@ -5,7 +5,12 @@ import {StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import {GeolocationFlow} from 'GeoLocationProvider';
 
-const GoogleMapView = ({children}) => {
+const GoogleMapView = ({
+  children,
+  showsUserLocation,
+  initialRegion,
+  initialDelta,
+}) => {
   const {
     settings: {theme},
   } = useContext(SettingsContext);
@@ -13,15 +18,17 @@ const GoogleMapView = ({children}) => {
     <MapView
       style={styles.map}
       provider={PROVIDER_GOOGLE}
-      showsUserLocation
+      showsUserLocation={showsUserLocation}
       maxZoomLevel={20}
       userLocationPriority="high"
       showsIndoorLevelPicker
       userInterfaceStyle={theme}
       initialRegion={{
-        ...GeolocationFlow.location,
-        latitudeDelta: 0.00922,
-        longitudeDelta: 0.00922,
+        latitude: initialRegion.latitude || GeolocationFlow.location.latitude,
+        longitude:
+          initialRegion.longitude || GeolocationFlow.location.longitude,
+        latitudeDelta: initialDelta.latitudeDelta,
+        longitudeDelta: initialDelta.longitudeDelta,
       }}>
       {children}
     </MapView>
@@ -38,8 +45,23 @@ export default React.memo(GoogleMapView);
 
 GoogleMapView.propTypes = {
   children: PropTypes.node,
+  showsUserLocation: PropTypes.bool,
+  initialRegion: PropTypes.shape({
+    latitude: PropTypes.number,
+    longitude: PropTypes.number,
+  }),
+  initialDelta: PropTypes.shape({
+    latitudeDelta: PropTypes.number,
+    longitudeDelta: PropTypes.number,
+  }),
 };
 
 GoogleMapView.defaultProps = {
   children: <></>,
+  showsUserLocation: true,
+  initialRegion: {},
+  initialDelta: {
+    latitudeDelta: 0.00922,
+    longitudeDelta: 0.00922,
+  },
 };

@@ -1,4 +1,4 @@
-# b2rist-native
+# be2rist-native
 
 ## Description
 
@@ -19,6 +19,13 @@ This react-native project for mobile platforms.
 - Put GEO_API_KEY into the project.properties to link GOOGLE_MAPS [GEO_API_KEY](https://developers.google.com/maps/documentation/geolocation/get-api-key).
 - Add google-services.json to the android/app folder [Manual Step3](https://firebase.google.com/docs/android/setup)
 - For Intellij Idea: Open android folder and run "Link to Gradle" in the popup menu and run "reload gradle project"
+- Create /environment/dev.js file in the root folder with data:
+
+```aidl
+export const config = {
+  CLIENT_ID: '<FIREBASE_PROJECT_ID>',
+};
+```
 
 ## Running
 - To start locally run ``npm run-script android`` or ``android`` script from package.json

@@ -11,7 +11,7 @@
 
 @end
 
-@implementation B2ristTests
+@implementation Be2ristTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {

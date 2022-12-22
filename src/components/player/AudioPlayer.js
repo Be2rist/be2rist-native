@@ -11,6 +11,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
+import {audioLink, imageLink} from 'utils/googleLinks';
 
 const getAudioTimeString = seconds => {
   const h = parseInt(seconds / (60 * 60), 10);
@@ -76,17 +77,21 @@ const AudioPlayer = ({
       sound.play(playComplete);
       setPlayState('playing');
     } else {
-      const loadSound = new Sound(point.audioContent, null, error => {
-        setSoundLoaded(true);
-        if (error) {
-          setPlayState('paused');
-        } else {
-          setSound(loadSound);
-          setPlayState('playing');
-          setDuration(loadSound.getDuration());
-          loadSound.play(playComplete);
-        }
-      });
+      const loadSound = new Sound(
+        audioLink(point.audioContent),
+        null,
+        error => {
+          setSoundLoaded(true);
+          if (error) {
+            setPlayState('paused');
+          } else {
+            setSound(loadSound);
+            setPlayState('playing');
+            setDuration(loadSound.getDuration());
+            loadSound.play(playComplete);
+          }
+        },
+      );
     }
   }, [playComplete, point.audioContent, sound]);
 
@@ -196,7 +201,7 @@ const AudioPlayer = ({
       style={styles.container}
       onPress={clickPause}>
       <ImageBackground
-        source={{uri: currentImage.image}}
+        source={{uri: imageLink(currentImage.image)}}
         resizeMethod="resize"
         style={styles.image}>
         <View style={styles.closeButton}>

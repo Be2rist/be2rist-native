@@ -1,11 +1,11 @@
 import React, {useCallback} from 'react';
 import {Avatar, Button, Card, Paragraph} from 'react-native-paper';
-import PanelHandle from 'components/point/PanelHandle';
 import PropTypes from 'prop-types';
+import {imageLink} from 'utils/googleLinks';
 
 const MapMarker = props => <Avatar.Icon {...props} icon="map-marker" />;
 
-const PointView = ({
+const PointSlidingUpPreview = ({
   point,
   distance,
   isNearby,
@@ -18,12 +18,9 @@ const PointView = ({
 
   return (
     <Card>
-      <Card.Content>
-        <PanelHandle />
-      </Card.Content>
       <Card.Title
         title={point.name}
-        subtitle={`${distance} m`}
+        subtitle={distance && `${distance} m`}
         left={MapMarker}
       />
       <Card.Actions>
@@ -39,7 +36,7 @@ const PointView = ({
           Play
         </Button>
       </Card.Actions>
-      {point.cover && <Card.Cover source={{uri: point.cover}} />}
+      {point.cover && <Card.Cover source={{uri: imageLink(point.cover)}} />}
       <Card.Content>
         <Paragraph>{point.description}</Paragraph>
       </Card.Content>
@@ -47,15 +44,15 @@ const PointView = ({
   );
 };
 
-export default PointView;
+export default PointSlidingUpPreview;
 
-PointView.propTypes = {
+PointSlidingUpPreview.propTypes = {
   point: PropTypes.shape({
     name: PropTypes.string.isRequired,
     cover: PropTypes.string,
     description: PropTypes.string,
   }).isRequired,
-  distance: PropTypes.number.isRequired,
+  distance: PropTypes.number,
   isNearby: PropTypes.bool.isRequired,
   setPlayingPoint: PropTypes.func.isRequired,
   clearPoint: PropTypes.func.isRequired,

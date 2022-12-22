@@ -14,7 +14,7 @@ const Preloader = ({loading, children}) =>
       </SkeletonPlaceholder.Item>
     </SkeletonPlaceholder>
   ) : (
-    {children}
+    <>{children}</>
   );
 
 export default Preloader;

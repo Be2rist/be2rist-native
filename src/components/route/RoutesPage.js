@@ -7,7 +7,7 @@ import {useNavigate} from 'react-router-native';
 const RoutesPage = () => {
   const [page] = useState({id: 0});
   const dispatch = useDispatch();
-  const routes = useSelector(state => selectRouteList(state));
+  const routes = useSelector(selectRouteList);
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(getRoutes(page));
