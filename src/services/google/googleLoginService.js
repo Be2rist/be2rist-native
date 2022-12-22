@@ -1,5 +1,5 @@
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {config} from 'config';
+import {config} from 'configs';
 
 export const loginWithGoogleDrive = async silent => {
   GoogleSignin.configure({

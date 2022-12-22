@@ -1,4 +1,4 @@
-import {config} from 'config';
+import {config} from 'configs';
 import {createSearchParams} from 'react-router-native';
 
 export const imageLink = id =>
