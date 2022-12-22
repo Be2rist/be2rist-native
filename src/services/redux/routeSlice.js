@@ -7,12 +7,10 @@ const initialState = {
 };
 
 export const getRoutes = createAsyncThunk(
-  'route/getRoutes',
+  'route/getAll',
   async (request, {rejectWithValue}) => {
     try {
-      const response = await functions().httpsCallable('route-getRoutes')(
-        request,
-      );
+      const response = await functions().httpsCallable('route-getAll')(request);
 
       return response.data;
     } catch (err) {
@@ -22,10 +20,10 @@ export const getRoutes = createAsyncThunk(
 );
 
 export const getRouteById = createAsyncThunk(
-  'route/getRouteById',
+  'route/getById',
   async (request, {rejectWithValue}) => {
     try {
-      const response = await functions().httpsCallable('route-getRouteById')(
+      const response = await functions().httpsCallable('route-getById')(
         request,
       );
       return response.data;

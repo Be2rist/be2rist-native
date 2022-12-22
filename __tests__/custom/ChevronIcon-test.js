@@ -1,9 +1,7 @@
 import 'react-native';
 import React from 'react';
-import ChevronIcon from 'components/custom/ChevronIcon';
-
-// Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
+import ChevronIcon from 'components/custom/ChevronIcon';
 
 it('chevron renders correctly', () => {
   const chevron = renderer.create(<ChevronIcon />).toJSON();

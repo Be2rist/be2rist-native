@@ -10,7 +10,7 @@ import {GeoLocationContext} from 'GeoLocationProvider';
 import {LOGO} from 'images';
 
 const AppHeader = () => {
-  const user = useSelector(state => selectUser(state));
+  const user = useSelector(selectUser);
   const navigate = useNavigate();
   const {
     settings: {theme},
@@ -21,7 +21,7 @@ const AppHeader = () => {
   return (
     <Appbar.Header style={styles.header}>
       <Image source={LOGO} style={styles.logoImage} />
-      <Appbar.Content title="B2rist" style={styles.title} />
+      <Appbar.Content title="Be2rist" style={styles.title} />
       {!gpsEnabled && <Appbar.Action icon="map-marker-off" color="red" />}
       <TouchableRipple
         onPress={() => navigate('/profile')}

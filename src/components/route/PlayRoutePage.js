@@ -10,7 +10,7 @@ import BackgroundScrollView from 'components/custom/BackgroundScrollView';
 import useNearbyPoint from 'components/point/useNearbyPoint';
 
 const PlayRoutePage = () => {
-  const route = useSelector(state => selectRoute(state));
+  const route = useSelector(selectRoute);
   const [pointIndex, setPointIndex] = useState(null);
   const [playRoute, setPlayRoute] = useState(false);
   const {position, enabled: gpsEnabled} = useContext(GeoLocationContext);

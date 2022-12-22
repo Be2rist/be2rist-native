@@ -12,6 +12,10 @@ if (__DEV__) {
   functions().useEmulator('localhost', 5001);
 }
 
+export const {config} = __DEV__
+  ? require('./environment/dev')
+  : require('./environment/prod');
+
 const RNRedux = () => (
   <Provider store={store}>
     <SettingsProvider>

@@ -8,31 +8,24 @@ import {
   View,
 } from 'react-native';
 import SlidingUpPanel from 'rn-sliding-up-panel';
-import PointView from 'components/point/PointView';
 import useDarkMode from 'components/custom/useDarkMode';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import PropTypes from 'prop-types';
+import PanelHandle from 'components/custom/slidingup/PanelHandle';
 
 const ios = Platform.OS === 'ios';
 
-const PointViewPanel = ({
-  point,
-  distance,
-  isNearby,
-  mapDimension,
-  setPlayingPoint,
-  clearPoint,
-}) => {
+const SlidingUpMainMenuPanel = ({children, viewDimension}) => {
   const darkMode = useDarkMode();
   const styles = useMemo(() => makeStyles(darkMode), [darkMode]);
   const deviceHeight = useWindowDimensions().height;
 
   const draggableRange = useMemo(
     () => ({
-      top: mapDimension.height + 1,
+      top: viewDimension.height + 1,
       bottom: deviceHeight / 7.8,
     }),
-    [deviceHeight, mapDimension.height],
+    [deviceHeight, viewDimension.height],
   );
 
   const [scrollEnabled, setScrollEnabled] = useState(false);
@@ -104,23 +97,18 @@ const PointViewPanel = ({
       snappingPoints={snappingPoints}
       backdropOpacity={0}
       showBackdrop={false}
-      height={mapDimension.height}
+      height={viewDimension.height}
       allowDragging={allowDragging}
       onMomentumDragEnd={onMomentumDragEnd}
       onDragStart={onDragStart}>
       <View style={styles.panelContent}>
+        <PanelHandle />
         <ScrollView
           scrollEnabled={scrollEnabled}
           showsVerticalScrollIndicator={false}
           bounces={false}
           onMomentumScrollEnd={onMomentumScrollEnd}>
-          <PointView
-            clearPoint={clearPoint}
-            isNearby={isNearby}
-            point={point}
-            distance={distance}
-            setPlayingPoint={setPlayingPoint}
-          />
+          {children}
         </ScrollView>
       </View>
     </SlidingUpPanel>
@@ -137,16 +125,12 @@ const makeStyles = isDarkMode =>
     },
   });
 
-export default PointViewPanel;
+export default SlidingUpMainMenuPanel;
 
-PointViewPanel.propTypes = {
-  point: PropTypes.object.isRequired,
-  distance: PropTypes.number.isRequired,
-  isNearby: PropTypes.bool.isRequired,
-  mapDimension: PropTypes.shape({
+SlidingUpMainMenuPanel.propTypes = {
+  viewDimension: PropTypes.shape({
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
   }).isRequired,
-  setPlayingPoint: PropTypes.func.isRequired,
-  clearPoint: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
 };

@@ -16,6 +16,8 @@ const styles = StyleSheet.create({
   handle: {
     backgroundColor: '#D6D6D6',
     width: 34,
+    marginTop: 10,
+    marginBottom: 10,
     height: 4,
     borderRadius: 4,
   },

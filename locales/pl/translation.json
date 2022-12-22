@@ -1,7 +1,14 @@
 {
   "login": "Zaloguj się",
+  "ok": "Tak",
+  "cancel": "Nie",
+  "edit": "Edytuj",
+  "play": "Pokaż",
   "error": {
     "tryLater": "Wystąpił błąd. Spróbuj ponownie później"
+  },
+  "validation": {
+    "required": "Wymagane"
   },
   "settings": {
     "title": "Ustawienia",
@@ -17,5 +24,25 @@
     "points": "Punkty",
     "games": "Gry",
     "sharing": "Dodaj"
+  },
+  "point": {
+    "edit": {
+      "title": "Punkt",
+      "label": {
+        "name": "Nazwa",
+        "language": "Język",
+        "cover": "Okładka",
+        "sound": "Ścieżka dźwiękowa",
+        "description": "Opis",
+        "latitude": "Szerokość",
+        "longitude": "Długość",
+        "radius": "Promień"
+      },
+      "gps": {
+        "dialog": {
+          "containsLocation": "Obraz zawiera lokalizację GPS. Ustawić lokalizację na punkt?"
+        }
+      }
+    }
   }
 }

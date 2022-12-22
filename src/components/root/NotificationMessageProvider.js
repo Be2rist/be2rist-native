@@ -8,7 +8,7 @@ import {
 } from 'services/redux/notificationMessageSlice';
 
 const NotificationMessageProvider = ({children}) => {
-  const {message} = useSelector(state => selectNotificationMessage(state));
+  const {message} = useSelector(selectNotificationMessage);
   const dispatch = useDispatch();
   const onClose = () => dispatch(hideNotificationMessage());
   return (

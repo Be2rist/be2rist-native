@@ -7,6 +7,7 @@ import {
   Paragraph,
   Title,
 } from 'react-native-paper';
+import {imageLink} from 'utils/googleLinks';
 
 const RouteCard = ({route, onPlay}) => {
   return (
@@ -15,13 +16,12 @@ const RouteCard = ({route, onPlay}) => {
         <Title>{route.name}</Title>
         <Paragraph>{route.description?.slice(30)}</Paragraph>
       </Card.Content>
-      <Card.Cover source={{uri: route.cover}} />
+      <Card.Cover source={{uri: imageLink(route.cover)}} />
       <Card.Actions>
         <IconButton
           icon="heart-outline"
           iconColor={MD3Colors.primary0}
           size={20}
-          onPress={() => console.log('Pressed')}
         />
         <IconButton
           icon="play"

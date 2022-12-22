@@ -15,13 +15,13 @@ import MediaResolver from 'components/player/MediaResolver';
 import {useNavigate, createSearchParams} from 'react-router-native';
 import useNearbyPoint from 'components/point/useNearbyPoint';
 import NewMarkers from 'components/custom/NewMarkers';
-import PointViewPanel from 'components/point/PointViewPanel';
+import PointSlidingUpPanel from 'components/point/view/PointSlidingUpPanel';
 import {getDistance} from 'geolib';
-import PointFilter from 'components/point/PointFilter';
+import PointFilter from 'components/point/view/PointFilter';
 
 const PointsPage = () => {
   const navigate = useNavigate();
-  const points = useSelector(state => selectPointPage(state));
+  const points = useSelector(selectPointPage);
   const {position, enabled: gpsEnabled} = useContext(GeoLocationContext);
   const [playingPoint, setPlayingPoint] = useState(null);
   const [played, setPlayed] = useState([]);
@@ -129,7 +129,7 @@ const PointsPage = () => {
         <GoogleMapView children={Markers} />
       </View>
       {!viewPoint && nearbyPoint && (
-        <PointViewPanel
+        <PointSlidingUpPanel
           point={nearbyPoint}
           mapDimension={mapDimension}
           isNearby
@@ -139,7 +139,7 @@ const PointsPage = () => {
         />
       )}
       {viewPoint && (
-        <PointViewPanel
+        <PointSlidingUpPanel
           mapDimension={mapDimension}
           point={viewPoint}
           isNearby={false}
