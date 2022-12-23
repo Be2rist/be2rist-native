@@ -48,6 +48,10 @@ const ProfilePage = () => {
     navigate('/settings');
   }, [navigate]);
 
+  const goLogin = useCallback(() => {
+    navigate('/login');
+  }, [navigate]);
+
   return (
     <BackgroundScrollView>
       <Appbar.Header>
@@ -66,7 +70,7 @@ const ProfilePage = () => {
             right={LogoutButton(onSignOut)}
           />
         ) : (
-          <Button onPress={() => navigate('/login')}>{t('login')}</Button>
+          <Button onPress={goLogin}>{t('login')}</Button>
         )}
       </View>
       <TouchableRipple onPress={goSettings} rippleColor="rgba(0, 0, 0, .32)">
