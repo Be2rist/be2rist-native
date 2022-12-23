@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useState} from 'react';
+import React, {createContext, useEffect, useMemo, useState} from 'react';
 import {getSettings} from 'services/sessionStorage';
 import Preloader from 'components/root/Preloader';
 import {useTranslation} from 'react-i18next';
@@ -19,10 +19,12 @@ const SettingsProvider = ({children}) => {
       .finally(() => setInitializing(false));
   }, [i18n]);
 
+  const settingsValue = useMemo(() => ({settings, setSettings}), [settings]);
+
   return initializing ? (
     <Preloader loading />
   ) : (
-    <SettingsContext.Provider value={{settings, setSettings}}>
+    <SettingsContext.Provider value={settingsValue}>
       {children}
     </SettingsContext.Provider>
   );

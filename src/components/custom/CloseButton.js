@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {IconButton} from 'react-native-paper';
 import {useNavigate} from 'react-router-native';
@@ -6,9 +6,14 @@ import PropTypes from 'prop-types';
 
 const CloseButton = ({path}) => {
   const navigate = useNavigate();
+
+  const close = useCallback(() => {
+    navigate(path);
+  }, [navigate, path]);
+
   return (
     <View style={styles.closeButton}>
-      <IconButton icon="close" size={50} onPress={() => navigate(path)} />
+      <IconButton icon="close" size={50} onPress={close} />
     </View>
   );
 };

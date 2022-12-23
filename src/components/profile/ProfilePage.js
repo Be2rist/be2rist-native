@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {
@@ -19,13 +19,11 @@ import {SettingsContext} from 'SettingsProvider';
 import ChevronIcon from 'components/custom/ChevronIcon';
 import BackgroundScrollView from 'components/custom/BackgroundScrollView';
 
-const LogoutButton = (props, onSignOut) => (
-  <IconButton {...props} icon="logout" onPress={onSignOut} />
-);
+const LogoutButton = onSignOut => props =>
+  <IconButton {...props} icon="logout" onPress={onSignOut} />;
 
-const ProfileAvatar = (props, user) => (
-  <Avatar.Image source={{uri: user.photoURL}} {...props} />
-);
+const ProfileAvatar = user => props =>
+  <Avatar.Image source={{uri: user.photoURL}} {...props} />;
 
 const SettingsIcon = props => <List.Icon {...props} icon="cog" />;
 
@@ -38,12 +36,22 @@ const ProfilePage = () => {
   } = useContext(SettingsContext);
   const isDarkMode = theme === 'dark';
 
-  const onSignOut = () => auth().signOut();
+  const onSignOut = useCallback(() => {
+    auth().signOut();
+  }, []);
+
+  const goBack = useCallback(() => {
+    navigate('/');
+  }, [navigate]);
+
+  const goSettings = useCallback(() => {
+    navigate('/settings');
+  }, [navigate]);
 
   return (
     <BackgroundScrollView>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigate('/')} />
+        <Appbar.BackAction onPress={goBack} />
         <Appbar.Content title={t('profile.title')} />
       </Appbar.Header>
       <View
@@ -54,16 +62,14 @@ const ProfilePage = () => {
           <Card.Title
             title={user.displayName}
             subtitle={user.email}
-            left={props => ProfileAvatar(props, user)}
-            right={props => LogoutButton(props, onSignOut)}
+            left={ProfileAvatar(user)}
+            right={LogoutButton(onSignOut)}
           />
         ) : (
           <Button onPress={() => navigate('/login')}>{t('login')}</Button>
         )}
       </View>
-      <TouchableRipple
-        onPress={() => navigate('/settings')}
-        rippleColor="rgba(0, 0, 0, .32)">
+      <TouchableRipple onPress={goSettings} rippleColor="rgba(0, 0, 0, .32)">
         <List.Item
           title={t('settings.title')}
           left={SettingsIcon}

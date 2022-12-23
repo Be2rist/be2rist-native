@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {Appbar, TouchableRipple} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {selectUser} from 'services/redux/userSlice';
@@ -18,13 +18,17 @@ const AppHeader = () => {
   const isDarkMode = theme === 'dark';
   const {enabled: gpsEnabled} = useContext(GeoLocationContext);
 
+  const openProfile = useCallback(() => {
+    navigate('/profile');
+  }, [navigate]);
+
   return (
     <Appbar.Header style={styles.header}>
       <Image source={LOGO} style={styles.logoImage} />
       <Appbar.Content title="Be2rist" style={styles.title} />
       {!gpsEnabled && <Appbar.Action icon="map-marker-off" color="red" />}
       <TouchableRipple
-        onPress={() => navigate('/profile')}
+        onPress={openProfile}
         rippleColor="rgba(0, 0, 0, .32)"
         borderless
         style={styles.avatarRipple}>

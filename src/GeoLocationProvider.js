@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useState} from 'react';
+import React, {createContext, useEffect, useMemo, useState} from 'react';
 import {enableLatestRenderer} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {PermissionsAndroid} from 'react-native';
@@ -69,8 +69,13 @@ const GeoLocationProvider = ({children}) => {
     };
   }, [enabled, error, initialized]);
 
+  const locationValue = useMemo(
+    () => ({position, enabled, error}),
+    [enabled, error, position],
+  );
+
   return (
-    <GeoLocationContext.Provider value={{position, enabled, error}}>
+    <GeoLocationContext.Provider value={locationValue}>
       {initialized ? children : null}
     </GeoLocationContext.Provider>
   );
