@@ -279,7 +279,7 @@ const createStyles = ({width, height}) =>
     closeButton: {
       position: 'absolute',
       left: 1,
-      top: 1,
+      top: 20,
     },
     previousButton: {
       position: 'absolute',

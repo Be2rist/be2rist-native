@@ -1,18 +1,23 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Surface, TouchableRipple} from 'react-native-paper';
 import {Image, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 
-const ImagePreview = ({file, onSelect}) => (
-  <Surface style={styles.card} elevation={1}>
-    <TouchableRipple
-      onPress={onSelect.bind(this, file.id)}
-      rippleColor="rgba(0, 0, 0, .32)"
-      borderless>
-      <Image source={{uri: file.thumbnailLink}} style={styles.image} />
-    </TouchableRipple>
-  </Surface>
-);
+const ImagePreview = ({file, onSelect}) => {
+  const handleSelect = useCallback(() => {
+    onSelect(file.id);
+  }, [file.id, onSelect]);
+  return (
+    <Surface style={styles.card} elevation={1}>
+      <TouchableRipple
+        onPress={handleSelect}
+        rippleColor="rgba(0, 0, 0, .32)"
+        borderless>
+        <Image source={{uri: file.thumbnailLink}} style={styles.image} />
+      </TouchableRipple>
+    </Surface>
+  );
+};
 
 const styles = StyleSheet.create({
   card: {

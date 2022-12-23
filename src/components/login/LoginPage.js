@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import {Navigate, useNavigate} from 'react-router-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {selectUser} from 'services/redux/userSlice';
@@ -44,15 +44,20 @@ const LoginPage = () => {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       auth()
         .signInWithCredential(googleCredential)
-        .catch(() =>
-          dispatch(showNotificationMessage({message: t('error.tryLater')})),
-        )
+        .catch(e => {
+          console.log(e);
+          dispatch(showNotificationMessage({message: t('error.tryLater')}));
+        })
         .finally(() => setProcessing(false));
     } catch (e) {
       console.log(e);
       dispatch(showNotificationMessage({message: t('error.tryLater')}));
     }
   };
+
+  const goBack = useCallback(() => {
+    navigate('/');
+  }, [navigate]);
 
   return (
     <>
@@ -63,7 +68,7 @@ const LoginPage = () => {
             backgroundColor={backgroundStyle.backgroundColor}
           />
           <Appbar.Header>
-            <Appbar.BackAction onPress={() => navigate('/')} />
+            <Appbar.BackAction onPress={goBack} />
             <Appbar.Content title={t('login')} />
           </Appbar.Header>
           <View style={style.googleContainer}>

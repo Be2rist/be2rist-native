@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {useNavigate} from 'react-router-native';
 import {useTranslation} from 'react-i18next';
 import {Appbar, List, Switch, TouchableRipple} from 'react-native-paper';
@@ -12,13 +12,16 @@ const ThemeLightIcon = props => (
   <List.Icon {...props} size={32} icon="theme-light-dark" />
 );
 
-const ThemeSwitch = ({props, settings, handleThemeChange}) => (
-  <Switch
-    {...props}
-    value={settings.theme === 'dark'}
-    onValueChange={handleThemeChange}
-  />
-);
+const ThemeSwitch =
+  ({settings, handleThemeChange}) =>
+  props =>
+    (
+      <Switch
+        {...props}
+        value={settings.theme === 'dark'}
+        onValueChange={handleThemeChange}
+      />
+    );
 
 const LanguageIcon = props => <List.Icon {...props} icon="format-clear" />;
 
@@ -59,16 +62,20 @@ const SettingsPage = () => {
     />
   );
 
+  const goBack = useCallback(() => {
+    navigate('/profile');
+  }, [navigate]);
+
   return (
     <BackgroundScrollView dialog={Dialog}>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigate('/profile')} />
+        <Appbar.BackAction onPress={goBack} />
         <Appbar.Content title={t('settings.title')} />
       </Appbar.Header>
       <List.Item
         title={t('settings.darkMode')}
         left={ThemeLightIcon}
-        right={props => ThemeSwitch({props, settings, handleThemeChange})}
+        right={ThemeSwitch({settings, handleThemeChange})}
       />
       <TouchableRipple
         onPress={showLanguageDialog}

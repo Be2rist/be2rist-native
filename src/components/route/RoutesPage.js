@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {getRoutes, selectRouteList} from 'services/redux/routeSlice';
 import RouteCard from 'components/route/RouteCard';
@@ -13,14 +13,17 @@ const RoutesPage = () => {
     dispatch(getRoutes(page));
   }, [dispatch, page]);
 
+  const handlePlay = useCallback(
+    id => () => {
+      navigate(`/play/${id}`);
+    },
+    [navigate],
+  );
+
   return (
     <>
       {routes.map(route => (
-        <RouteCard
-          key={route.id}
-          route={route}
-          onPlay={() => navigate(`/play/${route.id}`)}
-        />
+        <RouteCard key={route.id} route={route} onPlay={handlePlay(route.id)} />
       ))}
     </>
   );

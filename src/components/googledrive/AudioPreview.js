@@ -1,25 +1,30 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Surface, Text, TouchableRipple} from 'react-native-paper';
 import {Image, StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {AUDIO} from 'images';
 
-const AudioPreview = ({file, onSelect}) => (
-  <Surface style={styles.card} elevation={1}>
-    <View style={styles.name}>
-      <Text>{file.name}</Text>
-    </View>
-    <TouchableRipple
-      onPress={onSelect.bind(this, file.id)}
-      rippleColor="rgba(0, 0, 0, .32)"
-      borderless
-      style={styles.imageContainer}>
-      <View>
-        <Image style={styles.image} source={AUDIO} />
+const AudioPreview = ({file, onSelect}) => {
+  const handleSelect = useCallback(() => {
+    onSelect(file.id);
+  }, [file.id, onSelect]);
+  return (
+    <Surface style={styles.card} elevation={1}>
+      <View style={styles.name}>
+        <Text>{file.name}</Text>
       </View>
-    </TouchableRipple>
-  </Surface>
-);
+      <TouchableRipple
+        onPress={handleSelect}
+        rippleColor="rgba(0, 0, 0, .32)"
+        borderless
+        style={styles.imageContainer}>
+        <View>
+          <Image style={styles.image} source={AUDIO} />
+        </View>
+      </TouchableRipple>
+    </Surface>
+  );
+};
 
 const styles = StyleSheet.create({
   card: {
