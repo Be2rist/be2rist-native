@@ -1,6 +1,6 @@
-import AudioPlayer from 'components/player/AudioPlayer';
+import React, {useMemo} from 'react';
 import {View} from 'react-native';
-import React from 'react';
+import AudioPlayer from 'components/player/AudioPlayer';
 import PropTypes from 'prop-types';
 
 const MediaResolver = ({
@@ -12,9 +12,9 @@ const MediaResolver = ({
   isFirst,
   isLast,
 }) => {
-  switch (point.contentType) {
-    case 'sound-collage':
-      return (
+  const mediaMap = useMemo(
+    () => ({
+      ['sound-collage']: (
         <AudioPlayer
           key={point.id}
           point={point}
@@ -25,10 +25,11 @@ const MediaResolver = ({
           isFirst={disableControls || isFirst}
           isLast={disableControls || isLast}
         />
-      );
-    default:
-      return <View />;
-  }
+      ),
+    }),
+    [close, disableControls, isFirst, isLast, point, showNext, showPrevious],
+  );
+  return mediaMap[point.contentType] || <View />;
 };
 
 export default MediaResolver;

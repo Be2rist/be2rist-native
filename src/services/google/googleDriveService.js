@@ -39,7 +39,7 @@ export const getMetadata = async id => {
   await setToken();
   try {
     return await gDrive.files.getMetadata(id, {
-      fields: 'imageMediaMetadata,description,originalFilename',
+      fields: 'permissionIds,imageMediaMetadata,description,name',
     });
   } catch (e) {
     await processTokenExpiredError(e);
