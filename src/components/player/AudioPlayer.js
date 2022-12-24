@@ -7,12 +7,12 @@ import {
   StyleSheet,
   ImageBackground,
   Platform,
-  Slider,
   View,
   TouchableOpacity,
 } from 'react-native';
 import {audioLink, imageLink} from 'utils/googleLinks';
 import {createAudioCollage} from 'utils/pointContentUtils';
+import Slider from '@react-native-community/slider';
 
 const getAudioTimeString = seconds => {
   const h = parseInt(seconds / (60 * 60), 10);

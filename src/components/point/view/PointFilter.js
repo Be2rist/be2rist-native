@@ -1,7 +1,8 @@
 import React from 'react';
 import {IconButton, Text} from 'react-native-paper';
-import {Platform, Slider, StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
+import Slider from '@react-native-community/slider';
 
 const PointFilter = ({radius, radiusChanged}) => (
   <View style={styles.radius}>
