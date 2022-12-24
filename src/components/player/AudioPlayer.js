@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {audioLink, imageLink} from 'utils/googleLinks';
+import {createAudioCollage} from 'utils/pointContentUtils';
 
 const getAudioTimeString = seconds => {
   const h = parseInt(seconds / (60 * 60), 10);
@@ -37,20 +38,8 @@ const AudioPlayer = ({
   isFirst,
 }) => {
   const {height, width} = useWindowDimensions();
-  const timeMap = useMemo(() => {
-    const images = [...point.images];
-    images.sort((a, b) => {
-      if (a.time < b.time) {
-        return -1;
-      }
-      if (a.time > b.time) {
-        return 1;
-      }
-      return 0;
-    });
-    return images;
-  }, [point]);
-  const [currentImage, setCurrentImage] = useState(timeMap[0]);
+  const audioCollage = useMemo(() => createAudioCollage(point), [point]);
+  const [currentImage, setCurrentImage] = useState(audioCollage[0]);
   const [sound, setSound] = useState(null);
   const [soundLoaded, setSoundLoaded] = useState(false);
   const [playState, setPlayState] = useState('paused');
@@ -97,8 +86,8 @@ const AudioPlayer = ({
 
   const setImageByTime = useCallback(
     time => {
-      let imageKey = timeMap[0];
-      for (const timeMapKey of timeMap) {
+      let imageKey = audioCollage[0];
+      for (const timeMapKey of audioCollage) {
         if (time > timeMapKey.time) {
           imageKey = timeMapKey;
         } else {
@@ -109,7 +98,7 @@ const AudioPlayer = ({
         setCurrentImage(imageKey);
       }
     },
-    [currentImage, timeMap],
+    [currentImage, audioCollage],
   );
 
   useEffect(() => {

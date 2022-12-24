@@ -29,15 +29,12 @@ const languageOption = language => () =>
     </Text>
   );
 
-const imageName = (googleDriveMetadata, id) => () => {
-  return googleDriveMetadata.loading ? (
+const imageName = (googleDriveMetadata, id) => () =>
+  googleDriveMetadata.loading ? (
     <ActivityIndicator style={styles.textOption} />
   ) : (
-    <Text style={styles.textOption}>
-      {googleDriveMetadata.data[id]?.originalFilename}
-    </Text>
+    <Text style={styles.textOption}>{googleDriveMetadata.data[id]?.name}</Text>
   );
-};
 
 const PointForm = ({point, onSubmit}) => {
   const googleDriveMetadata = useSelector(selectMetadata);
