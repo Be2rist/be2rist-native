@@ -23,14 +23,14 @@ describe('point content utils tests', () => {
       images: [
         {image: '2', time: 0.2},
         {image: '3', time: 1},
-        {image: '4', time: 0.1},
+        {image: '4', time: 1},
       ],
     };
     expect(createAudioCollage(point)).toStrictEqual([
       {image: '1', time: 0},
-      {image: '4', time: 0.1},
       {image: '2', time: 0.2},
       {image: '3', time: 1},
+      {image: '4', time: 1},
     ]);
   });
 
