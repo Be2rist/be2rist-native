@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`media slider tests media slider renders test 1`] = `
+[
+  <Text
+    style={
+      [
+        {
+          "textAlign": "left",
+        },
+        {
+          "color": "rgba(28, 27, 31, 1)",
+          "fontFamily": "System",
+          "fontWeight": "400",
+          "letterSpacing": 0,
+        },
+        {
+          "writingDirection": "ltr",
+        },
+        {
+          "alignSelf": "center",
+          "color": "white",
+        },
+      ]
+    }
+  >
+    00:00:01
+  </Text>,
+  <RNCSlider
+    disabled={false}
+    inverted={false}
+    lowerLimit={-9007199254740991}
+    maximumTrackTintColor="gray"
+    maximumValue={150}
+    minimumTrackTintColor="white"
+    minimumValue={0}
+    onChange={null}
+    onRNCSliderAccessibilityAction={null}
+    onRNCSliderSlidingComplete={[Function]}
+    onRNCSliderSlidingStart={null}
+    onRNCSliderValueChange={null}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    onTouchEnd={[MockFunction]}
+    onTouchStart={[MockFunction]}
+    step={0}
+    style={
+      [
+        {
+          "alignSelf": "center",
+          "flex": 1,
+          "marginHorizontal": 5,
+        },
+        {
+          "height": 40,
+        },
+      ]
+    }
+    tapToSeek={false}
+    thumbTintColor="white"
+    upperLimit={9007199254740991}
+    value={1}
+  />,
+  <Text
+    style={
+      [
+        {
+          "textAlign": "left",
+        },
+        {
+          "color": "rgba(28, 27, 31, 1)",
+          "fontFamily": "System",
+          "fontWeight": "400",
+          "letterSpacing": 0,
+        },
+        {
+          "writingDirection": "ltr",
+        },
+        {
+          "alignSelf": "center",
+          "color": "white",
+        },
+      ]
+    }
+  >
+    00:02:30
+  </Text>,
+]
+`;

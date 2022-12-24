@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import * as PropTypes from 'prop-types';
-import {ActivityIndicator, IconButton, Text} from 'react-native-paper';
+import {ActivityIndicator, IconButton} from 'react-native-paper';
 import Sound from 'react-native-sound';
 import {
   useWindowDimensions,
@@ -12,21 +12,7 @@ import {
 } from 'react-native';
 import {audioLink, imageLink} from 'utils/googleLinks';
 import {createAudioCollage} from 'utils/pointContentUtils';
-import Slider from '@react-native-community/slider';
-
-const getAudioTimeString = seconds => {
-  const h = parseInt(seconds / (60 * 60), 10);
-  const m = parseInt((seconds % (60 * 60)) / 60, 10);
-  const s = parseInt(seconds % 60, 10);
-
-  return (
-    (h < 10 ? '0' + h : h) +
-    ':' +
-    (m < 10 ? '0' + m : m) +
-    ':' +
-    (s < 10 ? '0' + s : s)
-  );
-};
+import MediaSlider from 'components/player/MediaSlider';
 
 const AudioPlayer = ({
   point,
@@ -111,7 +97,7 @@ const AudioPlayer = ({
   }, [releaseSound, sound]);
 
   useEffect(() => {
-    const interval = setInterval(() => setLoop(Math.random()), 200);
+    const interval = setInterval(() => setLoop(Math.random()), 500);
     return () => clearInterval(interval);
   }, []);
 
@@ -128,15 +114,6 @@ const AudioPlayer = ({
       });
     }
   }, [loop, playState, setImageByTime, sliderEditing, sound]);
-
-  const currentTimeString = useMemo(
-    () => getAudioTimeString(playSeconds),
-    [playSeconds],
-  );
-  const durationString = useMemo(
-    () => getAudioTimeString(duration),
-    [duration],
-  );
 
   const onClose = useCallback(() => {
     releaseSound();
@@ -234,20 +211,13 @@ const AudioPlayer = ({
           )}
         </View>
         <View style={styles.controls}>
-          <Text style={styles.time}>{currentTimeString}</Text>
-          <Slider
-            onTouchStart={onSliderEditStart}
-            onTouchEnd={onSliderEditEnd}
-            onValueChange={onSliderEditing}
-            onSlidingComplete={onSliderEditing}
-            value={playSeconds}
-            maximumValue={duration}
-            maximumTrackTintColor="gray"
-            minimumTrackTintColor="white"
-            thumbTintColor="white"
-            style={styles.slider}
+          <MediaSlider
+            duration={duration}
+            onSliderEditStart={onSliderEditStart}
+            onSliderEditEnd={onSliderEditEnd}
+            onSliderEditing={onSliderEditing}
+            playSeconds={playSeconds}
           />
-          <Text style={styles.duration}>{durationString}</Text>
         </View>
       </ImageBackground>
     </TouchableOpacity>
