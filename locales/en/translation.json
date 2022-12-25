@@ -27,7 +27,15 @@
   },
   "route": {
     "edit": {
-      "title": "Route"
+      "title": "Route",
+      "label": {
+        "name": "Name",
+        "language": "Language",
+        "cover": "Cover",
+        "description": "Description",
+        "latitude": "Latitude",
+        "longitude": "Longitude"
+      }
     }
   },
   "point": {
@@ -45,7 +53,7 @@
       },
       "gps": {
         "dialog": {
-          "containsLocation": "The image contains the GPS location. Set location to point?"
+          "containsLocation": "The image contains the GPS location. Set location?"
         }
       }
     }

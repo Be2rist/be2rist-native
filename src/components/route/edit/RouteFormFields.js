@@ -18,7 +18,7 @@ const RouteFormFields = ({
     <>
       <TextInputField
         name="name"
-        label={t('point.edit.label.name')}
+        label={t('route.edit.label.name')}
         validate={required}
       />
       <TouchableRipple
@@ -27,14 +27,14 @@ const RouteFormFields = ({
         <TextInputField
           readonly
           name="language"
-          label={t('point.edit.label.language')}
+          label={t('route.edit.label.language')}
           validate={required}
           render={languageOption(getState().values?.language)}
         />
       </TouchableRipple>
       <TextInputField
         name="cover"
-        label={t('point.edit.label.cover')}
+        label={t('route.edit.label.cover')}
         validate={required}
         render={imageName(googleDriveMetadata, getState().values?.cover)}
         right={
@@ -48,7 +48,7 @@ const RouteFormFields = ({
       <TextInputField
         keyboardType="numeric"
         name="location._latitude"
-        label={t('point.edit.label.latitude')}
+        label={t('route.edit.label.latitude')}
         validate={required}
         right={
           <TextInput.Icon icon="google-maps" onPress={showLocationDialog} />
@@ -57,12 +57,12 @@ const RouteFormFields = ({
       <TextInputField
         keyboardType="numeric"
         name="location._longitude"
-        label={t('point.edit.label.longitude')}
+        label={t('route.edit.label.longitude')}
         validate={required}
       />
       <TextInputField
         name="description"
-        label={t('point.edit.label.description')}
+        label={t('route.edit.label.description')}
         multiline
         numberOfLines={3}
       />
