@@ -32,6 +32,13 @@ jest.mock('react-i18next', () => ({
   },
 }));
 
+jest.mock('configs', () => ({
+  config: {
+    GOOGLE_MAP_API_KEY: 'TEST_API_KEY',
+    CLIENT_ID: 'CLIENT_ID',
+  },
+}));
+
 jest.useFakeTimers();
 global.clearImmediate = jest.fn();
 global.setImmediate = jest.fn();
