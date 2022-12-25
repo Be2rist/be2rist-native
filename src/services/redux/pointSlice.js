@@ -74,9 +74,10 @@ export const getPointById = createAsyncThunk(
   },
 );
 
-export const initPoint = createAsyncThunk('point/init', () => {
-  return initialState.point;
-});
+export const initPoint = createAsyncThunk(
+  'point/init',
+  () => initialState.point,
+);
 
 const pointSlice = createSlice({
   name: 'point',
@@ -97,6 +98,7 @@ const pointSlice = createSlice({
     });
     builder.addCase(getUserPoints.pending, state => {
       state.pointList.loading = true;
+      state.pointList.list = [];
       state.pointList.error = null;
     });
     builder.addCase(getUserPoints.fulfilled, (state, action) => {

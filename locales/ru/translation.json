@@ -25,6 +25,11 @@
     "games": "Игры",
     "sharing": "Общее"
   },
+  "route": {
+    "edit": {
+      "title": "Маршрут"
+    }
+  },
   "point": {
     "edit": {
       "title": "Точка",

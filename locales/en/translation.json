@@ -25,6 +25,11 @@
     "games": "Games",
     "sharing": "Sharing"
   },
+  "route": {
+    "edit": {
+      "title": "Route"
+    }
+  },
   "point": {
     "edit": {
       "title": "Point",

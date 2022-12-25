@@ -1,25 +1,23 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import ElementFormHandler from 'components/form/ElementFormHandler';
-import PointFormFields from 'components/point/edit/PointFormFields';
+import PropTypes from 'prop-types';
+import RouteFormFields from 'components/route/edit/RouteFormFields';
 
-const PointForm = ({point, onSubmit}) => (
+const RouteForm = ({route, onSubmit}) => (
   <ElementFormHandler
     onSubmit={onSubmit}
-    item={point}
-    FormFields={PointFormFields}
+    item={route}
+    FormFields={RouteFormFields}
   />
 );
 
-export default PointForm;
+export default RouteForm;
 
-PointForm.propTypes = {
-  point: PropTypes.shape({
+RouteForm.propTypes = {
+  route: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,
     cover: PropTypes.string,
-    audioContent: PropTypes.string,
-    contentType: PropTypes.string,
     location: PropTypes.shape({
       _latitude: PropTypes.number,
       _longitude: PropTypes.number,

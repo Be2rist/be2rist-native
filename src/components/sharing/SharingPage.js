@@ -1,35 +1,104 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {FAB} from 'react-native-paper';
-import {useNavigate} from 'react-router-native';
-import {useSelector} from 'react-redux';
-import {selectPointList} from 'services/redux/pointSlice';
+import {Button, FAB} from 'react-native-paper';
+import {matchRoutes, useLocation, useNavigate} from 'react-router-native';
 import BackgroundScrollView from 'components/custom/BackgroundScrollView';
-import PointShortView from 'components/point/view/PointShortView';
-import Preloader from 'components/root/Preloader';
+import {useTranslation} from 'react-i18next';
+import routes from 'routes';
+import SharingPoints from 'components/sharing/SharingPoints';
+import SharingRoutes from 'components/sharing/SharingRoutes';
+
+const routeElements = {
+  ROUTES: 'ROUTES',
+  POINTS: 'POINTS',
+};
+
+const selectedElementMap = {
+  '/sharing/routes': routeElements.ROUTES,
+  '/sharing/points': routeElements.POINTS,
+};
+
+const sharingPageResolver = {
+  [routeElements.ROUTES]: <SharingRoutes />,
+  [routeElements.POINTS]: <SharingPoints />,
+};
+
+const createElementLinks = {
+  [routeElements.ROUTES]: '/route',
+  [routeElements.POINTS]: '/point',
+};
 
 const SharingPage = () => {
   const navigate = useNavigate();
-  const points = useSelector(selectPointList);
-  const createPoint = useCallback(() => {
-    navigate('/point');
+  const location = useLocation();
+  const {t} = useTranslation();
+  const [{route}] = matchRoutes(routes, location);
+
+  const selectedElement = useMemo(
+    () => selectedElementMap[route.path],
+    [route.path],
+  );
+
+  const createElement = useCallback(() => {
+    navigate(createElementLinks[selectedElement]);
+  }, [navigate, selectedElement]);
+
+  const navigateRoutes = useCallback(() => {
+    navigate('/sharing/routes');
+  }, [navigate]);
+
+  const navigatePoints = useCallback(() => {
+    navigate('/sharing/points');
   }, [navigate]);
 
   return (
-    <Preloader loading={points.loading}>
+    <View style={styles.page}>
       <BackgroundScrollView>
+        <View style={styles.elementContainer}>
+          <Button
+            style={styles.elementButton}
+            icon="navigation-variant"
+            mode={
+              selectedElement === routeElements.ROUTES
+                ? 'contained'
+                : 'elevated'
+            }
+            onPress={navigateRoutes}>
+            {t('mainMenu.routes')}
+          </Button>
+          <Button
+            style={styles.elementButton}
+            icon="map-marker"
+            mode={
+              selectedElement === routeElements.POINTS
+                ? 'contained'
+                : 'elevated'
+            }
+            onPress={navigatePoints}>
+            {t('mainMenu.points')}
+          </Button>
+        </View>
         <View style={styles.content}>
-          {points.list.map(point => (
-            <PointShortView key={point.id} point={point} />
-          ))}
+          {sharingPageResolver[selectedElement]}
         </View>
       </BackgroundScrollView>
-      <FAB icon="plus" style={styles.fab} onPress={createPoint} />
-    </Preloader>
+      <FAB icon="plus" style={styles.fab} onPress={createElement} />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+  },
+  elementContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  elementButton: {
+    margin: 5,
+    flexBasis: '46%',
+  },
   content: {
     flex: 1,
     flexWrap: 'wrap',

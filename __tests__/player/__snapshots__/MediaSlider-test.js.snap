@@ -9,10 +9,7 @@ exports[`media slider tests media slider renders test 1`] = `
           "textAlign": "left",
         },
         {
-          "color": "rgba(28, 27, 31, 1)",
-          "fontFamily": "System",
-          "fontWeight": "400",
-          "letterSpacing": 0,
+          "color": "rgba(73, 69, 79, 1)",
         },
         {
           "writingDirection": "ltr",
@@ -68,10 +65,7 @@ exports[`media slider tests media slider renders test 1`] = `
           "textAlign": "left",
         },
         {
-          "color": "rgba(28, 27, 31, 1)",
-          "fontFamily": "System",
-          "fontWeight": "400",
-          "letterSpacing": 0,
+          "color": "rgba(73, 69, 79, 1)",
         },
         {
           "writingDirection": "ltr",
