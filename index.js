@@ -12,8 +12,10 @@ if (__DEV__) {
   functions().useEmulator('localhost', 5001);
 }
 
+const reduxStore = store();
+
 const RNRedux = () => (
-  <Provider store={store}>
+  <Provider store={reduxStore}>
     <SettingsProvider>
       <App />
     </SettingsProvider>

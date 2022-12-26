@@ -26,7 +26,7 @@ export const getMetadataById = createAsyncThunk(
       const data = getState().googleDrive.metadata.data;
       const files = {};
       for (const id of ids) {
-        files[id] = data.id ? {data: data.id} : await getMetadata(id);
+        files[id] = data[id] ? {data: data.id} : await getMetadata(id);
       }
       return files;
     } catch (err) {
@@ -63,7 +63,7 @@ const googleDriveSlice = createSlice({
     });
     builder.addCase(getMetadataById.rejected, (state, action) => {
       state.metadata.loading = false;
-      state.metadata.error = action.error?.message || 'unknown';
+      state.metadata.error = action.error?.message;
     });
     builder.addCase(getFiles.pending, state => {
       state.files.loading = true;
@@ -76,7 +76,7 @@ const googleDriveSlice = createSlice({
     });
     builder.addCase(getFiles.rejected, (state, action) => {
       state.files.loading = false;
-      state.files.error = action.error || 'unknown';
+      state.files.error = action.error;
     });
   },
 });

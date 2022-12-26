@@ -13,7 +13,6 @@ import {
 
 const LoginPage = lazy(() => import('components/login/LoginPage'));
 const SharingPage = lazy(() => import('components/sharing/SharingPage'));
-const GamesPage = lazy(() => import('components/game/GamesPage'));
 const ProfilePage = lazy(() => import('components/profile/ProfilePage'));
 const PointsPage = lazy(() => import('components/point/view/PointsPage'));
 const PointEditPage = lazy(() => import('components/point/edit/PointEditPage'));
@@ -52,16 +51,6 @@ const routes = [
     index: 1,
     unAuthenticated: true,
     actions: [params => getNearbyPoints(params)],
-  },
-  {
-    path: '/games',
-    key: 'games',
-    element: <GamesPage />,
-    title: 'games',
-    focusedIcon: 'gamepad',
-    unfocusedIcon: 'gamepad-outline',
-    index: 2,
-    unAuthenticated: true,
   },
   {
     path: '/sharing/points',
