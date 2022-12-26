@@ -59,6 +59,7 @@
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
     ],
+    "clearMocks": true,
     "setupFiles": [
       "<rootDir>/jest/setup.js"
     ],
