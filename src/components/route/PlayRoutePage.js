@@ -8,9 +8,10 @@ import PlayRoutePreview from 'components/route/PlayRoutePreview';
 import MediaResolver from 'components/player/MediaResolver';
 import BackgroundScrollView from 'components/custom/BackgroundScrollView';
 import useNearbyPoint from 'components/point/useNearbyPoint';
+import Preloader from 'components/root/Preloader';
 
 const PlayRoutePage = () => {
-  const route = useSelector(selectRoute);
+  const {data: route, loading} = useSelector(selectRoute);
   const [pointIndex, setPointIndex] = useState(null);
   const [playRoute, setPlayRoute] = useState(false);
   const {position, enabled: gpsEnabled} = useContext(GeoLocationContext);
@@ -54,24 +55,26 @@ const PlayRoutePage = () => {
 
   return (
     <BackgroundScrollView>
-      {route && !pointIndex && (
-        <>
-          <CloseButton />
-          {gpsEnabled && playRoute && <PlayRoutePreview route={route} />}
-          {!playRoute && <RouteCard route={route} onPlay={onPlayRoute} />}
-        </>
-      )}
-      {route && playRoute && pointIndex && route.points[pointIndex - 1] && (
-        <MediaResolver
-          point={route.points[pointIndex - 1]}
-          close={stopPlaying}
-          disableControls={gpsEnabled}
-          showNext={showNext}
-          showPrevious={showPrevious}
-          isFirst={pointIndex === 1}
-          isLast={route.points.length === pointIndex}
-        />
-      )}
+      <Preloader loading={loading}>
+        {route && !pointIndex && (
+          <>
+            <CloseButton />
+            {gpsEnabled && playRoute && <PlayRoutePreview route={route} />}
+            {!playRoute && <RouteCard route={route} onPlay={onPlayRoute} />}
+          </>
+        )}
+        {route && playRoute && pointIndex && route.points[pointIndex - 1] && (
+          <MediaResolver
+            point={route.points[pointIndex - 1]}
+            close={stopPlaying}
+            disableControls={gpsEnabled}
+            showNext={showNext}
+            showPrevious={showPrevious}
+            isFirst={pointIndex === 1}
+            isLast={route.points.length === pointIndex}
+          />
+        )}
+      </Preloader>
     </BackgroundScrollView>
   );
 };

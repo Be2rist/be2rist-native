@@ -25,6 +25,11 @@
     "games": "Games",
     "sharing": "Sharing"
   },
+  "route": {
+    "edit": {
+      "title": "Route"
+    }
+  },
   "point": {
     "edit": {
       "title": "Point",
@@ -40,7 +45,7 @@
       },
       "gps": {
         "dialog": {
-          "containsLocation": "The image contains the GPS location. Set location to point?"
+          "containsLocation": "The image contains the GPS location. Set location?"
         }
       }
     }

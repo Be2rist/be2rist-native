@@ -1,18 +1,19 @@
 import {GDrive} from '@robinbobin/react-native-google-drive-api-wrapper';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {loginWithGoogleDrive} from 'services/google/googleLoginService';
 
-const gDrive = new GDrive();
+const gDrive = () => new GDrive();
 
-const setToken = async () => {
+const createDrive = async () => {
   const {accessToken} = await GoogleSignin.getTokens();
-  gDrive.accessToken = accessToken;
+  const drive = gDrive();
+  drive.accessToken = accessToken;
+  return drive;
 };
 
-const processTokenExpiredError = async e => {
+const processTokenExpiredError = async (e, token) => {
   if (parseError(e)?.error?.code === 401 && (await GoogleSignin.isSignedIn())) {
     try {
-      await loginWithGoogleDrive(true);
+      await GoogleSignin.clearCachedAccessToken(token);
     } catch (error) {
       console.log(error);
     }
@@ -23,39 +24,39 @@ const parseError = e => JSON.parse(JSON.parse(JSON.stringify(e)).message);
 
 export const getDriveFiles = async mimeTypes => {
   const queryParam = mimeTypes?.map(type => `mimeType='${type}'`).join(' or ');
-  await setToken();
+  const drive = await createDrive();
   try {
-    return await gDrive.files.list({
+    return await drive.files.list({
       q: queryParam,
       fields: 'nextPageToken, files(id, name, thumbnailLink, mimeType)',
     });
   } catch (e) {
-    await processTokenExpiredError(e);
+    await processTokenExpiredError(e, drive.accessToken);
     throw e;
   }
 };
 
 export const getMetadata = async id => {
-  await setToken();
+  const drive = await createDrive();
   try {
-    return await gDrive.files.getMetadata(id, {
+    return await drive.files.getMetadata(id, {
       fields: 'permissionIds,imageMediaMetadata,description,name',
     });
   } catch (e) {
-    await processTokenExpiredError(e);
+    await processTokenExpiredError(e, drive.accessToken);
     throw e;
   }
 };
 
 export const shareFile = async fileId => {
-  await setToken();
+  const drive = await createDrive();
   try {
-    return await gDrive.permissions.create(fileId, undefined, {
+    return await drive.permissions.create(fileId, undefined, {
       role: 'reader',
       type: 'anyone',
     });
   } catch (e) {
-    await processTokenExpiredError(e);
+    await processTokenExpiredError(e, drive.accessToken);
     throw e;
   }
 };

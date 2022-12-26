@@ -1,5 +1,9 @@
 import React, {lazy} from 'react';
-import {getRouteById} from 'services/redux/routeSlice';
+import {
+  getRouteById,
+  getUserRoutes,
+  initRoute,
+} from 'services/redux/routeSlice';
 import {
   getNearbyPoints,
   getPointById,
@@ -13,6 +17,7 @@ const GamesPage = lazy(() => import('components/game/GamesPage'));
 const ProfilePage = lazy(() => import('components/profile/ProfilePage'));
 const PointsPage = lazy(() => import('components/point/view/PointsPage'));
 const PointEditPage = lazy(() => import('components/point/edit/PointEditPage'));
+const RouteEditPage = lazy(() => import('components/route/edit/RouteEditPage'));
 const PointViewPage = lazy(() => import('components/point/view/PointViewPage'));
 const PlayRoutePage = lazy(() => import('components/route/PlayRoutePage'));
 const RoutesPage = lazy(() => import('components/route/RoutesPage'));
@@ -55,20 +60,25 @@ const routes = [
     title: 'games',
     focusedIcon: 'gamepad',
     unfocusedIcon: 'gamepad-outline',
-    mainMenu: true,
     index: 2,
     unAuthenticated: true,
   },
   {
-    path: '/sharing',
+    path: '/sharing/points',
     key: 'sharing',
     element: <SharingPage />,
     title: 'sharing',
     focusedIcon: 'image-edit',
     unfocusedIcon: 'image-edit-outline',
     mainMenu: true,
-    index: 3,
+    index: 2,
     actions: [() => getUserPoints()],
+  },
+  {
+    path: '/sharing/routes',
+    index: 2,
+    element: <SharingPage />,
+    actions: [() => getUserRoutes()],
   },
   {
     path: '/play/:id',
@@ -90,10 +100,16 @@ const routes = [
     fullScreen: true,
   },
   {
+    path: '/route',
+    element: <RouteEditPage />,
+    fullScreen: true,
+    actions: [() => initRoute()],
+  },
+  {
     path: '/point',
     element: <PointEditPage />,
     fullScreen: true,
-    actions: [params => initPoint({id: params.id})],
+    actions: [() => initPoint()],
   },
   {
     path: '/point/:id',

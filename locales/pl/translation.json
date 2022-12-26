@@ -25,6 +25,11 @@
     "games": "Gry",
     "sharing": "Dodaj"
   },
+  "route": {
+    "edit": {
+      "title": "Trasa"
+    }
+  },
   "point": {
     "edit": {
       "title": "Punkt",

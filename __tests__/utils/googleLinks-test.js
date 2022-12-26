@@ -1,11 +1,5 @@
 import {audioLink, googleMapStatic, imageLink} from 'utils/googleLinks';
 
-jest.mock('configs', () => ({
-  config: {
-    GOOGLE_MAP_API_KEY: 'TEST_API_KEY',
-  },
-}));
-
 describe('google links tests', () => {
   it('test image link', () => {
     expect(imageLink('id1')).toBe(
