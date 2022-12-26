@@ -1,10 +1,11 @@
 import React from 'react';
-import {TextInput, TouchableRipple} from 'react-native-paper';
+import {TextInput} from 'react-native-paper';
 import TextInputField from 'components/form/TextInputField';
 import {required} from 'utils/validation';
 import {useTranslation} from 'react-i18next';
 import PropTypes from 'prop-types';
-import {imageName, languageOption} from 'components/form/formOptions';
+import {imageName} from 'components/form/formOptions';
+import ElementFormFields from 'components/form/ElementFormFields';
 
 const PointFormFields = ({
   showLanguageDialog,
@@ -17,49 +18,12 @@ const PointFormFields = ({
   const {t} = useTranslation();
   return (
     <>
-      <TextInputField
-        name="name"
-        label={t('point.edit.label.name')}
-        validate={required}
-      />
-      <TouchableRipple
-        onPress={showLanguageDialog}
-        rippleColor="rgba(0, 0, 0, .32)">
-        <TextInputField
-          readonly
-          name="language"
-          label={t('point.edit.label.language')}
-          validate={required}
-          render={languageOption(getState().values?.language)}
-        />
-      </TouchableRipple>
-      <TextInputField
-        name="cover"
-        label={t('point.edit.label.cover')}
-        validate={required}
-        render={imageName(googleDriveMetadata, getState().values?.cover)}
-        right={
-          <TextInput.Icon
-            disabled={googleDriveMetadata.loading}
-            icon="image-edit-outline"
-            onPress={showImageGoogleDrive}
-          />
-        }
-      />
-      <TextInputField
-        keyboardType="numeric"
-        name="location._latitude"
-        label={t('point.edit.label.latitude')}
-        validate={required}
-        right={
-          <TextInput.Icon icon="google-maps" onPress={showLocationDialog} />
-        }
-      />
-      <TextInputField
-        keyboardType="numeric"
-        name="location._longitude"
-        label={t('point.edit.label.longitude')}
-        validate={required}
+      <ElementFormFields
+        getState={getState}
+        googleDriveMetadata={googleDriveMetadata}
+        showImageGoogleDrive={showImageGoogleDrive}
+        showLocationDialog={showLocationDialog}
+        showLanguageDialog={showLanguageDialog}
       />
       <TextInputField
         keyboardType="numeric"
@@ -79,12 +43,6 @@ const PointFormFields = ({
             onPress={showMediaGoogleDrive}
           />
         }
-      />
-      <TextInputField
-        name="description"
-        label={t('point.edit.label.description')}
-        multiline
-        numberOfLines={3}
       />
     </>
   );

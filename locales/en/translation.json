@@ -27,15 +27,7 @@
   },
   "route": {
     "edit": {
-      "title": "Route",
-      "label": {
-        "name": "Name",
-        "language": "Language",
-        "cover": "Cover",
-        "description": "Description",
-        "latitude": "Latitude",
-        "longitude": "Longitude"
-      }
+      "title": "Route"
     }
   },
   "point": {

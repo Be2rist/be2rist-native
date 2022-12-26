@@ -27,15 +27,7 @@
   },
   "route": {
     "edit": {
-      "title": "Маршрут",
-      "label": {
-        "name": "Наименование",
-        "language": "Язык",
-        "cover": "Обложка",
-        "description": "Описание",
-        "latitude": "Широта",
-        "longitude": "Долгота"
-      }
+      "title": "Маршрут"
     }
   },
   "point": {

@@ -27,15 +27,7 @@
   },
   "route": {
     "edit": {
-      "title": "Trasa",
-      "label": {
-        "name": "Nazwa",
-        "language": "Język",
-        "cover": "Okładka",
-        "description": "Opis",
-        "latitude": "Szerokość",
-        "longitude": "Długość"
-      }
+      "title": "Trasa"
     }
   },
   "point": {
