@@ -3,7 +3,7 @@ import * as PropTypes from 'prop-types';
 import {Navigate, useLocation, useParams} from 'react-router-native';
 import {selectUser} from 'services/redux/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {parse} from 'query-string';
+import queryString from 'query-string';
 import {SettingsContext} from 'SettingsProvider';
 
 const ProtectedActionRoute = ({route}) => {
@@ -19,7 +19,9 @@ const ProtectedActionRoute = ({route}) => {
     allowed &&
       route.actions &&
       route.actions.forEach(action =>
-        dispatch(action({...pathParams, ...parse(search), language})),
+        dispatch(
+          action({...pathParams, ...queryString.parse(search), language}),
+        ),
       );
   }, [route, pathParams, dispatch, allowed, search, language]);
   return allowed ? route.element : <Navigate to="/login" />;

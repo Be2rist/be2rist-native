@@ -1,7 +1,7 @@
 import 'react-native';
 import React from 'react';
 import SharingPage from 'components/sharing/SharingPage';
-import renderer from 'react-test-renderer';
+import {render, screen} from '@testing-library/react-native';
 
 jest.mock('react-router-native', () => ({
   ...jest.requireActual('react-router-native'),
@@ -17,10 +17,9 @@ jest.mock('react-redux', () => {
   };
 });
 
-const wrapper = () => renderer.create(<SharingPage />);
-
 describe('sharing page tests', () => {
   it('sharing page renders test', () => {
-    expect(wrapper().toJSON()).toMatchSnapshot();
+    render(<SharingPage />);
+    expect(screen.toJSON()).toMatchSnapshot();
   });
 });

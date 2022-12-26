@@ -13,7 +13,7 @@ This react-native project for mobile platforms.
 ### 2. Install npm dependencies
 - Run
   ``npm ci``
-- 
+
 ### 3. Build gradle project
 - Create new file project.properties in the android folder and put [key params](https://developer.android.com/studio/publish/app-signing).
 - Put GEO_API_KEY into the project.properties to link GOOGLE_MAPS [GEO_API_KEY](https://developers.google.com/maps/documentation/geolocation/get-api-key).
@@ -24,6 +24,7 @@ This react-native project for mobile platforms.
 ```aidl
 export const config = {
   CLIENT_ID: '<FIREBASE_PROJECT_ID>',
+  GOOGLE_MAP_API_KEY: '<GOOGLE_MAP_API_KEY>',
 };
 ```
 
