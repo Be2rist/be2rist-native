@@ -41,7 +41,7 @@ describe('protected action route component tests', () => {
 
   it('unAuthenticated route test', () => {
     render(<ProtectedActionRoute route={route} />);
-    expect(screen.getByTestId('test-element')).toBeDefined();
+    expect(screen.getByTestId('test-element')).toBeTruthy();
     expect(mockAction).toHaveBeenCalledWith({
       id: 'id1',
       language: 'en',
@@ -54,7 +54,7 @@ describe('protected action route component tests', () => {
   it('unAuthenticated route test without actions', () => {
     const routeWithoutActions = {...route, actions: undefined};
     render(<ProtectedActionRoute route={routeWithoutActions} />);
-    expect(screen.getByTestId('test-element')).toBeDefined();
+    expect(screen.getByTestId('test-element')).toBeTruthy();
     expect(mockDispatch).toHaveBeenCalledTimes(0);
   });
 });
