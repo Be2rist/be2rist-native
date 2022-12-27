@@ -42,9 +42,7 @@ const AudioPlayer = ({
   const playComplete = useCallback(() => {
     setPlaySeconds(0);
     setPlayState('paused');
-    if (sound) {
-      sound.setCurrentTime(0);
-    }
+    sound?.setCurrentTime(0);
   }, [sound]);
 
   const onPlay = useCallback(() => {
@@ -163,15 +161,18 @@ const AudioPlayer = ({
 
   return (
     <TouchableOpacity
+      testID="touchable-player"
       activeOpacity={1}
       style={styles.container}
       onPress={clickPause}>
       <ImageBackground
+        testID="background"
         source={{uri: imageLink(currentImage.image)}}
         resizeMethod="resize"
         style={styles.image}>
         <View style={styles.closeButton}>
           <IconButton
+            testID="close-button"
             icon="close"
             size={50}
             onPress={onClose}
@@ -182,6 +183,7 @@ const AudioPlayer = ({
           <>
             <View style={styles.previousButton}>
               <IconButton
+                testID="previous-button"
                 icon="skip-previous"
                 size={50}
                 onPress={onShowPrevious}
@@ -190,6 +192,7 @@ const AudioPlayer = ({
             </View>
             <View style={styles.nextButton}>
               <IconButton
+                testID="next-button"
                 icon="skip-next"
                 size={50}
                 onPress={onShowNext}
@@ -200,10 +203,16 @@ const AudioPlayer = ({
         )}
         <View style={styles.playButton}>
           {soundLoaded && playState === 'paused' && (
-            <IconButton icon={'play'} size={50} onPress={clickPause} />
+            <IconButton
+              icon={'play'}
+              size={50}
+              onPress={clickPause}
+              testID="play-button"
+            />
           )}
           {!soundLoaded && (
             <ActivityIndicator
+              testID="sound-loading"
               size={45}
               animating={true}
               style={styles.loadingSpinner}
@@ -228,6 +237,7 @@ const createStyles = ({width, height}) =>
   StyleSheet.create({
     container: {
       flex: 1,
+      backgroundColor: 'black',
       height: height - 30,
       width: width - 1,
     },
