@@ -19,6 +19,8 @@ export default class Sound {
 
   static callback;
 
+  static playComplete;
+
   constructor(sound, base, callback) {
     Sound.DOCUMENT = sound;
     Sound.callback = callback;
@@ -34,7 +36,8 @@ export default class Sound {
     }
   }
 
-  play() {
+  play(playComplete) {
+    Sound.playComplete = playComplete;
     Sound.playMock();
   }
 

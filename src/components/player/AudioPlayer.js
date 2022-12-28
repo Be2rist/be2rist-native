@@ -39,11 +39,21 @@ const AudioPlayer = ({
     sound?.release();
   }, [sound]);
 
+  const onClose = useCallback(() => {
+    releaseSound();
+    setSound(null);
+    close();
+  }, [close, releaseSound]);
+
   const playComplete = useCallback(() => {
-    setPlaySeconds(0);
-    setPlayState('paused');
-    sound?.setCurrentTime(0);
-  }, [sound]);
+    if (disablePointControls) {
+      onClose();
+    } else {
+      setPlaySeconds(0);
+      setPlayState('paused');
+      sound?.setCurrentTime(0);
+    }
+  }, [disablePointControls, onClose, sound]);
 
   const onPlay = useCallback(() => {
     if (sound) {
@@ -112,12 +122,6 @@ const AudioPlayer = ({
       });
     }
   }, [loop, playState, setImageByTime, sliderEditing, sound]);
-
-  const onClose = useCallback(() => {
-    releaseSound();
-    setSound(null);
-    close();
-  }, [close, releaseSound]);
 
   const onPause = useCallback(() => {
     sound?.pause();
