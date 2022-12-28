@@ -1,0 +1,146 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`new marker test 1`] = `
+[
+  <AIRMapMarker
+    coordinate={
+      {
+        "latitude": 54.41221902644764,
+        "longitude": 18.533400003253522,
+      }
+    }
+    onPress={[Function]}
+    style={
+      [
+        {
+          "backgroundColor": "transparent",
+          "position": "absolute",
+        },
+        undefined,
+      ]
+    }
+    testID="new-marker-m3Ss7dha9TRCT8na9irS"
+    title="Elephants"
+    tracksViewChanges={false}
+  >
+    <Image
+      source={
+        {
+          "testUri": "../../../src/images/marker.png",
+        }
+      }
+      style={
+        {
+          "height": 29,
+          "width": 24,
+        }
+      }
+    />
+  </AIRMapMarker>,
+  <AIRMapMarker
+    coordinate={
+      {
+        "latitude": 54.410370053735996,
+        "longitude": 18.539548069238663,
+      }
+    }
+    onPress={[Function]}
+    style={
+      [
+        {
+          "backgroundColor": "transparent",
+          "position": "absolute",
+        },
+        undefined,
+      ]
+    }
+    testID="new-marker-0wcA2uvk3yVHBrqpRKwB"
+    title="Lions"
+    tracksViewChanges={false}
+  >
+    <Image
+      source={
+        {
+          "testUri": "../../../src/images/marker.png",
+        }
+      }
+      style={
+        {
+          "height": 29,
+          "width": 24,
+        }
+      }
+    />
+  </AIRMapMarker>,
+  <AIRMapMarker
+    coordinate={
+      {
+        "latitude": 54.34817976567255,
+        "longitude": 18.65583504157628,
+      }
+    }
+    onPress={[Function]}
+    style={
+      [
+        {
+          "backgroundColor": "transparent",
+          "position": "absolute",
+        },
+        undefined,
+      ]
+    }
+    testID="new-marker-L5Bq5UzXl1EkAKj9E4xf"
+    title="Green gate"
+    tracksViewChanges={false}
+  >
+    <Image
+      source={
+        {
+          "testUri": "../../../src/images/marker.png",
+        }
+      }
+      style={
+        {
+          "height": 29,
+          "width": 24,
+        }
+      }
+    />
+  </AIRMapMarker>,
+  <AIRMapMarker
+    coordinate={
+      {
+        "latitude": 54.360587751617885,
+        "longitude": 18.649858281381743,
+      }
+    }
+    onPress={[Function]}
+    style={
+      [
+        {
+          "backgroundColor": "transparent",
+          "position": "absolute",
+        },
+        undefined,
+      ]
+    }
+    testID="new-marker-C8U9O6WC9YQIsKVgpFzm"
+    title="Stocznia Gdańska"
+    tracksViewChanges={false}
+  >
+    <Image
+      source={
+        {
+          "testUri": "../../../src/images/marker.png",
+        }
+      }
+      style={
+        {
+          "height": 29,
+          "width": 24,
+        }
+      }
+    />
+  </AIRMapMarker>,
+]
+`;

@@ -13,7 +13,12 @@ const CloseButton = ({path}) => {
 
   return (
     <View style={styles.closeButton}>
-      <IconButton icon="close" size={50} onPress={close} />
+      <IconButton
+        testID="close-button"
+        icon="close"
+        size={50}
+        onPress={close}
+      />
     </View>
   );
 };

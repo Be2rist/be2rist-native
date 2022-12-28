@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`close button test 1`] = `
+<View
+  style={
+    {
+      "left": 1,
+      "position": "absolute",
+      "top": 1,
+      "zIndex": 10001,
+    }
+  }
+>
+  <View
+    collapsable={false}
+    style={
+      {
+        "backgroundColor": undefined,
+        "borderColor": undefined,
+        "borderRadius": 37.5,
+        "borderWidth": 0,
+        "elevation": 0,
+        "height": 75,
+        "margin": 6,
+        "overflow": "hidden",
+        "width": 75,
+      }
+    }
+  >
+    <View
+      accessibilityComponentType="button"
+      accessibilityRole="button"
+      accessibilityState={
+        {
+          "disabled": false,
+        }
+      }
+      accessibilityTraits="button"
+      accessible={true}
+      centered={true}
+      collapsable={false}
+      focusable={true}
+      hitSlop={
+        {
+          "bottom": 6,
+          "left": 6,
+          "right": 6,
+          "top": 6,
+        }
+      }
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        [
+          {
+            "overflow": "hidden",
+          },
+          false,
+          [
+            {
+              "alignItems": "center",
+              "flexGrow": 1,
+              "justifyContent": "center",
+            },
+            {
+              "borderRadius": 37.5,
+            },
+          ],
+        ]
+      }
+      testID="close-button"
+    >
+      <Text
+        accessibilityElementsHidden={true}
+        allowFontScaling={false}
+        importantForAccessibility="no-hide-descendants"
+        pointerEvents="none"
+        selectable={false}
+        style={
+          [
+            {
+              "color": "rgba(73, 69, 79, 1)",
+              "fontSize": 50,
+            },
+            [
+              {
+                "lineHeight": 50,
+                "transform": [
+                  {
+                    "scaleX": 1,
+                  },
+                ],
+              },
+              {
+                "backgroundColor": "transparent",
+              },
+            ],
+            {
+              "fontFamily": "Material Design Icons",
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            {},
+          ]
+        }
+      >
+        󰅖
+      </Text>
+    </View>
+  </View>
+</View>
+`;

@@ -9,6 +9,7 @@ const NewMarkers = ({points, setPoint}) => {
   return points.map(point => (
     <Marker
       key={point.id}
+      testID={`new-marker-${point.id}`}
       title={point.name}
       onPress={onSetPoint(point)}
       tracksViewChanges={false}

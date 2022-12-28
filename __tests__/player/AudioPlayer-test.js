@@ -98,7 +98,6 @@ describe('audio player tests', () => {
     await act(async () => {
       Sound.callback();
       Sound.loaded = true;
-      await waitFor(() => expect(queryByTestId('sound-loading')).toBeNull());
       await waitFor(() => expect(queryByTestId('play-button')).toBeNull());
       fireEvent.press(getByTestId('touchable-player'));
       await waitFor(() =>
@@ -109,8 +108,33 @@ describe('audio player tests', () => {
       expect(DEFAULT_PROPS.showPrevious).toHaveBeenCalledTimes(1);
       await waitFor(() => expect(queryByTestId('next-button')).toBeTruthy());
       fireEvent.press(queryByTestId('next-button'));
-      expect(Sound.releaseMock).toHaveBeenCalledTimes(2);
+      await waitFor(() => expect(Sound.releaseMock).toHaveBeenCalledTimes(2));
       expect(DEFAULT_PROPS.showNext).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('play complete test', async () => {
+    const {queryByTestId} = render(<AudioPlayer {...DEFAULT_PROPS} />);
+    await act(async () => {
+      Sound.callback();
+      Sound.loaded = true;
+      await waitFor(() => expect(queryByTestId('sound-loading')).toBeNull());
+      Sound.playComplete();
+      await waitFor(() => expect(Sound.releaseMock).toHaveBeenCalledTimes(1));
+      expect(DEFAULT_PROPS.close).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('play complete with navigation buttons test', async () => {
+    const {queryByTestId} = render(
+      <AudioPlayer {...DEFAULT_PROPS} disablePointControls={false} />,
+    );
+    await act(async () => {
+      Sound.callback();
+      Sound.loaded = true;
+      await waitFor(() => expect(queryByTestId('sound-loading')).toBeNull());
+      Sound.playComplete();
+      await waitFor(() => expect(queryByTestId('play-button')).toBeTruthy());
     });
   });
 });

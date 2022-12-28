@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`background scroll view test 1`] = `
+<RCTSafeAreaView
+  style={
+    {
+      "backgroundColor": "#F3F3F3",
+      "flex": 1,
+    }
+  }
+>
+  <RCTScrollView
+    contentInsetAdjustmentBehavior="automatic"
+    style={
+      {
+        "backgroundColor": "#F3F3F3",
+        "flex": 1,
+      }
+    }
+  >
+    <View>
+      <View />
+    </View>
+  </RCTScrollView>
+</RCTSafeAreaView>
+`;
